@@ -1,0 +1,26 @@
+name: moneyconverter
+description: Currency converter based on the ECB euro foreign exchange reference rates.
+publish_to: none
+version: 2.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  http: ^1.2.2
+  intl: any
+  shared_preferences: ^2.3.2
+  xml: ^6.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
