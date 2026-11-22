@@ -82,8 +82,8 @@ class ConverterController extends Notifier<ConverterState> {
   ConverterState build() {
     final prefs = ref.watch(sharedPreferencesProvider);
     return ConverterState(
-      from: prefs.getString(_fromKey) ?? 'ZAR',
-      to: prefs.getString(_toKey) ?? 'EUR',
+      from: prefs.getString(_fromKey) ?? 'EUR',
+      to: prefs.getString(_toKey) ?? 'AUD',
       amountText: prefs.getString(_amountKey) ?? '100',
     );
   }
