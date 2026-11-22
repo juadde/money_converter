@@ -21,3 +21,7 @@ fi
 if [ -f "$MANIFEST" ]; then
   perl -pi -e 's|android:label="moneyconverter"|android:label="Money Converter"|' "$MANIFEST"
 fi
+
+# App icon for Android, iOS and web (config in pubspec.yaml).
+flutter pub get
+dart run flutter_launcher_icons

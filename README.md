@@ -46,6 +46,16 @@ python3 tool/ecb_to_json.py --output web/rates.json
 flutter run -d chrome
 ```
 
+## Icône
+
+L'icône (billet vert) est dessinée en SVG dans `assets/icon/`. Après modification, régénérer les PNG puis les icônes des plateformes :
+
+```sh
+rsvg-convert -w 1024 -h 1024 assets/icon/bill.svg -o assets/icon/icon.png
+rsvg-convert -w 1024 -h 1024 assets/icon/bill_foreground.svg -o assets/icon/icon_foreground.png
+dart run flutter_launcher_icons
+```
+
 ## Organisation du code
 
 | Dossier | Contenu |
@@ -56,12 +66,13 @@ flutter run -d chrome
 | `lib/ui` | Écran principal, sélecteur de devise, graphique |
 | `lib/l10n` | Textes français et anglais |
 | `tool` | Génération des plateformes, conversion XML BCE vers JSON |
+| `assets/icon` | Icône de l'appli (sources SVG et PNG 1024 px) |
 
 ## Intégration et déploiement continus
 
-- **CI** (`.github/workflows/ci.yml`), sur chaque PR et chaque push sur `main` : analyse, tests, build web, build de l'APK (téléchargeable dans les artefacts du run).
+- **CI** (`.github/workflows/ci.yml`), sur chaque PR et chaque push sur `main` : analyse, tests, build web. Le build de l'APK est désactivé pour l'instant (`if: false`).
 - **Deploy** (`.github/workflows/deploy.yml`) :
-  - à chaque push sur `main` : appli web sur GitHub Pages, APK publié dans la release `latest`, build iOS de contrôle ;
+  - à chaque push sur `main` : appli web sur GitHub Pages. La release APK et le build iOS sont désactivés pour l'instant (`if: false`) ;
   - chaque jour ouvré après la publication de la BCE : redéploiement web avec un `rates.json` à jour.
 
 ### Réglages à faire une fois sur GitHub
