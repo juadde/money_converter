@@ -70,9 +70,9 @@ dart run flutter_launcher_icons
 
 ## Intégration et déploiement continus
 
-- **CI** (`.github/workflows/ci.yml`), sur chaque PR et chaque push sur `main` : analyse, tests, build web, build de l'APK (téléchargeable dans les artefacts du run).
+- **CI** (`.github/workflows/ci.yml`), sur chaque PR et chaque push sur `main` : analyse, tests, build web. Le build de l'APK est désactivé pour l'instant (`if: false`).
 - **Deploy** (`.github/workflows/deploy.yml`) :
-  - à chaque push sur `main` : appli web sur GitHub Pages, APK publié dans la release `latest`, build iOS de contrôle ;
+  - à chaque push sur `main` : appli web sur GitHub Pages. La release APK et le build iOS sont désactivés pour l'instant (`if: false`) ;
   - chaque jour ouvré après la publication de la BCE : redéploiement web avec un `rates.json` à jour.
 
 ### Réglages à faire une fois sur GitHub

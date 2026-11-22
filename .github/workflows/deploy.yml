@@ -1,7 +1,7 @@
 name: Deploy
 
-# - every push on master: web app to GitHub Pages, Android APK to the
-#   "latest" release, iOS build check;
+# - every push on main: web app to GitHub Pages (Android APK release and
+#   iOS build check are disabled for now);
 # - every working day after the ECB publication (around 16:00 CET): the web
 #   app is redeployed with a fresh rates.json, the fallback data source.
 on:
@@ -48,7 +48,9 @@ jobs:
 
   android:
     name: Android APK to the "latest" release
-    if: github.event_name != 'schedule'
+    # Disabled for now: only the web app is deployed. To re-enable, use:
+    #   if: github.event_name != 'schedule'
+    if: false
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -79,7 +81,9 @@ jobs:
 
   ios:
     name: iOS build (no code signing)
-    if: github.event_name != 'schedule'
+    # Disabled for now: only the web app is deployed. To re-enable, use:
+    #   if: github.event_name != 'schedule'
+    if: false
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v5

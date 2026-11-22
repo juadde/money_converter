@@ -35,6 +35,8 @@ jobs:
 
   android:
     name: Build Android APK
+    # Disabled for now: only the web app is built. Remove this line to re-enable.
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
