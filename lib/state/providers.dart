@@ -125,9 +125,7 @@ class LanguageController extends Notifier<Locale?> {
   @override
   Locale? build() {
     final code = ref.watch(sharedPreferencesProvider).getString(_key);
-    final supported = AppStrings.supportedLocales
-        .any((locale) => locale.languageCode == code);
-    return supported ? Locale(code!) : null;
+    return code != null && AppStrings.isSupported(code) ? Locale(code) : null;
   }
 
   /// [locale] null means "device language".

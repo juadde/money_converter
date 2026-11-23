@@ -59,4 +59,4 @@ msix_config:
   publisher: CN=00000000-0000-0000-0000-000000000000
   logo_path: assets/icon/icon.png
   capabilities: internetClient
-  languages: fr-fr, en-us
+  languages: en-us, fr-fr, de-de, es-es

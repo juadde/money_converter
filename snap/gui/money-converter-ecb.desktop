@@ -2,8 +2,12 @@
 Type=Application
 Name=Money Converter
 Name[fr]=Convertisseur de devises
+Name[de]=Währungsrechner
+Name[es]=Conversor de divisas
 Comment=Currency converter based on the ECB reference rates
 Comment[fr]=Convertisseur de devises basé sur les taux de la BCE
+Comment[de]=Währungsrechner mit den Referenzkursen der EZB
+Comment[es]=Conversor de divisas con los tipos de referencia del BCE
 Exec=money-converter-ecb
 Icon=${SNAP}/meta/gui/icon.png
 Categories=Office;Finance;Utility;

@@ -47,7 +47,7 @@ class CurrencyFlag extends StatelessWidget {
 class LanguageFlag extends StatelessWidget {
   const LanguageFlag(this.languageCode, {super.key, this.width = 24});
 
-  static const _countries = {'en': 'GB', 'fr': 'FR'};
+  static const _countries = {'en': 'GB', 'fr': 'FR', 'de': 'DE', 'es': 'ES'};
 
   final String languageCode;
   final double width;
