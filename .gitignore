@@ -26,3 +26,9 @@ coverage/
 **/ios/.symlinks/
 **/ios/Flutter/Generated.xcconfig
 **/ios/Flutter/flutter_export_environment.sh
+
+# Snap
+*.snap
+/parts/
+/stage/
+/prime/

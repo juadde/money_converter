@@ -1,0 +1,29 @@
+# Snap package for Linux. The app is built beforehand with
+# `flutter build linux --release` (see the "Desktop" workflow); this file only
+# packages build/linux/x64/release/bundle with the GNOME runtime.
+name: money-converter-ecb
+title: Money Converter
+summary: Currency converter based on the ECB reference rates
+description: |
+  Convert amounts between all the currencies published by the European
+  Central Bank, with live conversion while typing and a chart of past
+  values. Works offline with the last saved rates.
+# Replaced by the workflow with the pubspec version and the run number.
+version: '0.0.0'
+base: core24
+grade: stable
+confinement: strict
+platforms:
+  amd64:
+
+apps:
+  money-converter-ecb:
+    command: moneyconverter
+    extensions: [gnome]
+    plugs:
+      - network
+
+parts:
+  money-converter:
+    plugin: dump
+    source: build/linux/x64/release/bundle

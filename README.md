@@ -4,7 +4,7 @@ Convertisseur de devises basé sur les
 [taux de référence de la Banque centrale européenne](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.fr.html),
 publiés en open data chaque jour ouvré vers 16 h (CET).
 
-Application Flutter : Android, iOS et web avec une seule base de code.
+Application Flutter : Android, iOS, web, Windows et Linux avec une seule base de code.
 
 ## Fonctionnalités
 
@@ -30,7 +30,7 @@ flutter run --dart-define=RATES_FALLBACK_URL=https://exemple.org/rates.json
 
 ## Développement
 
-Les dossiers `android/`, `ios/` et `web/` ne sont pas versionnés : un script les génère avec `flutter create` et y applique les réglages nécessaires (permission Internet, nom de l'appli).
+Les dossiers `android/`, `ios/`, `web/`, `windows/` et `linux/` ne sont pas versionnés : un script les génère avec `flutter create` et y applique les réglages nécessaires (permission Internet, nom de l'appli).
 
 ```sh
 bash tool/bootstrap_platforms.sh
@@ -71,6 +71,7 @@ dart run flutter_launcher_icons
 ## Intégration et déploiement continus
 
 - **CI** (`.github/workflows/ci.yml`), sur chaque PR et chaque push sur `main` : analyse, tests, build web. Le build de l'APK est désactivé pour l'instant (`if: false`).
+- **Desktop** (`.github/workflows/desktop.yml`) : snap Linux et paquet MSIX Windows à chaque push sur `main`, publiés sur le Snap Store et le Microsoft Store une fois activés (voir « Windows et Linux »).
 - **Play Store** (`.github/workflows/play-store.yml`) : bundle Android signé, envoyé sur Google Play à chaque push sur `main` une fois activé (voir « Play Store »).
 - **Deploy** (`.github/workflows/deploy.yml`) :
   - à chaque push sur `main` : appli web sur GitHub Pages. La release APK et le build iOS sont désactivés pour l'instant (`if: false`) ;
@@ -122,3 +123,46 @@ Le workflow `Play Store` construit un Android App Bundle (`.aab`) signé avec la
 
 - Sur un compte développeur personnel créé après le 13 novembre 2023, Google exige un test fermé avec au moins 12 testeurs inscrits pendant 14 jours d'affilée avant d'ouvrir la production. Les tests internes ne comptent pas : utilise la piste `alpha` pour ce test fermé.
 - Les builds Android de `ci.yml` et `deploy.yml` restent désactivés ; ce workflow est indépendant.
+
+## Windows et Linux
+
+Le workflow `Desktop` construit, à chaque push sur `main` (ou à la main depuis l'onglet Actions) :
+
+- **Linux** : un snap (`money-converter-ecb`, base `core24`, extension GNOME) ;
+- **Windows** : un paquet MSIX pour le Microsoft Store.
+
+Les deux paquets sont toujours disponibles en artefacts du run. La publication suit la même logique que pour le Play Store :
+
+| Déclencheur | Snap Store | Microsoft Store |
+| --- | --- | --- |
+| Push sur `main` | Si la variable `SNAP_STORE_ENABLED` vaut `true` | Si la variable `MSSTORE_ENABLED` vaut `true` |
+| Lancement manuel (onglet Actions) | Si les identifiants sont configurés | Si les identifiants sont configurés |
+| PR qui touche l'empaquetage | Jamais (build seulement) | Jamais (build seulement) |
+
+### Snap Store (une seule fois)
+
+1. Créer un compte sur [snapcraft.io](https://snapcraft.io) et réserver le nom : `snapcraft register money-converter-ecb`. Si le nom est pris, en choisir un autre et le changer dans `snap/snapcraft.yaml` (champ `name`, nom de l'appli et nom du fichier `.desktop` dans `snap/gui/`).
+2. Générer des identifiants pour la CI :
+
+   ```sh
+   snapcraft export-login --snaps=money-converter-ecb --acls=package_access,package_push,package_update,package_release -
+   ```
+
+3. Mettre la sortie dans le secret `SNAPCRAFT_STORE_CREDENTIALS`.
+4. Activer les publications automatiques : variable `SNAP_STORE_ENABLED` = `true`.
+5. Facultatif : la variable `SNAP_CHANNEL` choisit le canal (`edge` par défaut, puis `beta`, `candidate` ou `stable`).
+
+### Microsoft Store (une seule fois)
+
+1. Avoir un compte développeur dans [Partner Center](https://partner.microsoft.com/dashboard) et y réserver le nom de l'appli.
+2. Dans la page de l'appli, « Identité du produit », recopier dans les **variables** GitHub :
+   - `MSSTORE_IDENTITY_NAME` (Package/Identity/Name)
+   - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, de la forme `CN=…`)
+   - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
+   - `MSSTORE_PRODUCT_ID` (Store ID, 12 caractères)
+3. Faire la **première soumission à la main** (exigé par Microsoft) : lancer le workflow `Desktop`, télécharger l'artefact `moneyconverter-msix-…` et l'importer dans une soumission Partner Center, avec la fiche, les captures et la classification d'âge.
+4. Associer un annuaire Microsoft Entra ID (Azure AD) au compte Partner Center, y créer une application avec le rôle « Manager », puis mettre dans les **secrets** GitHub : `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
+
+5. Activer les publications automatiques : variable `MSSTORE_ENABLED` = `true`.
+
+Ensuite, chaque push sur `main` crée et envoie une nouvelle soumission (version `2.0.<numéro de run>.0`).

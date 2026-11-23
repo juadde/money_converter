@@ -22,6 +22,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.3
+  msix: ^3.16.0
 
 flutter:
   uses-material-design: true
@@ -41,3 +42,20 @@ flutter_launcher_icons:
     image_path: assets/icon/icon.png
     background_color: "#EAF6EE"
     theme_color: "#1E8E4E"
+  windows:
+    generate: true
+    image_path: assets/icon/icon.png
+    icon_size: 256
+
+# Windows package (MSIX) for the Microsoft Store. The Store identity
+# (identity name, publisher, publisher display name) is passed by the
+# "Desktop" workflow from the repository variables, see the README.
+msix_config:
+  display_name: Money Converter
+  publisher_display_name: juadde
+  identity_name: com.juadde.moneyconverter
+  # Placeholder: the Store publisher comes from the MSSTORE_PUBLISHER variable.
+  publisher: CN=00000000-0000-0000-0000-000000000000
+  logo_path: assets/icon/icon.png
+  capabilities: internetClient
+  languages: fr-fr, en-us

@@ -1,0 +1,142 @@
+name: Desktop
+
+# Builds the Linux (snap) and Windows (MSIX) packages and publishes them.
+#
+# - push on main: build and keep the packages as run artifacts; publish to
+#   the Snap Store once the SNAP_STORE_ENABLED variable is "true", to the
+#   Microsoft Store once MSSTORE_ENABLED is "true";
+# - manual run (Actions tab): build, then publish to each store whose
+#   credentials are configured (SNAPCRAFT_STORE_CREDENTIALS, PARTNER_CENTER_*);
+# - pull request touching the packaging: build only, nothing is published.
+#
+# Setup: see "Windows et Linux" in the README.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - .github/workflows/desktop.yml
+      - snap/**
+      - tool/bootstrap_platforms.sh
+      - pubspec.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-${{ github.event_name == 'pull_request' && github.ref || 'release' }}
+  cancel-in-progress: false
+
+jobs:
+  linux:
+    name: Linux snap
+    runs-on: ubuntu-24.04
+    env:
+      PUBLISH: ${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && vars.SNAP_STORE_ENABLED == 'true')) && secrets.SNAPCRAFT_STORE_CREDENTIALS != '' }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Generate platform folders
+        run: bash tool/bootstrap_platforms.sh
+      - run: flutter build linux --release
+
+      - name: Snap version
+        run: |
+          base=$(sed -n 's/^version: *\([0-9.]*\).*/\1/p' pubspec.yaml)
+          sed -i "s/^version: .*/version: '${base}+${{ github.run_number }}'/" snap/snapcraft.yaml
+          grep '^version:' snap/snapcraft.yaml
+
+      - uses: snapcore/action-build@v1
+        id: snap
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moneyconverter-snap-${{ github.run_number }}
+          path: ${{ steps.snap.outputs.snap }}
+          retention-days: 30
+
+      - name: Publish to the Snap Store
+        if: env.PUBLISH == 'true'
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+        with:
+          snap: ${{ steps.snap.outputs.snap }}
+          release: ${{ vars.SNAP_CHANNEL || 'edge' }}
+
+  windows:
+    name: Windows MSIX
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      PUBLISH: ${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && vars.MSSTORE_ENABLED == 'true')) && secrets.PARTNER_CENTER_CLIENT_SECRET != '' }}
+      MSIX: build/msix/moneyconverter.msix
+    steps:
+      - uses: actions/checkout@v5
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Generate platform folders
+        run: bash tool/bootstrap_platforms.sh
+
+      - name: Build the MSIX package
+        env:
+          IDENTITY_NAME: ${{ vars.MSSTORE_IDENTITY_NAME }}
+          PUBLISHER: ${{ vars.MSSTORE_PUBLISHER }}
+          PUBLISHER_DISPLAY_NAME: ${{ vars.MSSTORE_PUBLISHER_DISPLAY_NAME }}
+        run: |
+          # Store versions are a.b.c.0: pubspec major.minor, then the run number.
+          base=$(sed -n 's/^version: *\([0-9]*\.[0-9]*\).*/\1/p' pubspec.yaml)
+          args=(--store --output-path build/msix --output-name moneyconverter
+                --version "${base}.${{ github.run_number }}.0")
+          # The Store identity, as shown in Partner Center (Product identity).
+          if [ -n "$IDENTITY_NAME" ]; then args+=(--identity-name "$IDENTITY_NAME"); fi
+          if [ -n "$PUBLISHER" ]; then args+=(--publisher "$PUBLISHER"); fi
+          if [ -n "$PUBLISHER_DISPLAY_NAME" ]; then
+            args+=(--publisher-display-name "$PUBLISHER_DISPLAY_NAME")
+          fi
+          if [ "$PUBLISH" = true ] && { [ -z "$IDENTITY_NAME" ] || [ -z "$PUBLISHER" ]; }; then
+            echo "::error::Set the MSSTORE_IDENTITY_NAME and MSSTORE_PUBLISHER variables (see README)."
+            exit 1
+          fi
+          dart run msix:create "${args[@]}"
+          ls -l "$MSIX"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moneyconverter-msix-${{ github.run_number }}
+          path: ${{ env.MSIX }}
+          retention-days: 30
+
+      - name: Install the Microsoft Store CLI
+        if: env.PUBLISH == 'true'
+        uses: microsoft/microsoft-store-apppublisher@v1.1
+
+      - name: Publish to the Microsoft Store
+        if: env.PUBLISH == 'true'
+        env:
+          TENANT_ID: ${{ secrets.PARTNER_CENTER_TENANT_ID }}
+          SELLER_ID: ${{ secrets.PARTNER_CENTER_SELLER_ID }}
+          CLIENT_ID: ${{ secrets.PARTNER_CENTER_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.PARTNER_CENTER_CLIENT_SECRET }}
+          PRODUCT_ID: ${{ vars.MSSTORE_PRODUCT_ID }}
+        run: |
+          if [ -z "$PRODUCT_ID" ]; then
+            echo "::error::Set the MSSTORE_PRODUCT_ID variable (see README)."
+            exit 1
+          fi
+          msstore reconfigure --tenantId "$TENANT_ID" --sellerId "$SELLER_ID" \
+            --clientId "$CLIENT_ID" --clientSecret "$CLIENT_SECRET"
+          msstore publish "$MSIX" -id "$PRODUCT_ID" -v
