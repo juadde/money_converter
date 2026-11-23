@@ -38,6 +38,8 @@ jobs:
       - name: Generate platform folders
         run: bash tool/bootstrap_platforms.sh
       - run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+      - name: Add the privacy policy
+        run: cp site/privacy.html build/web/privacy.html
       - name: Add the ECB rates as JSON
         run: python3 tool/ecb_to_json.py --output build/web/rates.json
       - uses: actions/upload-pages-artifact@v3
