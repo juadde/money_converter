@@ -1,0 +1,1 @@
+Prima versione: conversione istantanea tra 38 valute con i tassi di riferimento della BCE, grafico dell'andamento, valute a parità fissa, modalità offline e 8 lingue.

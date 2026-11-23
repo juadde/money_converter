@@ -1,0 +1,1 @@
+Prima versiune: conversie în timp real între 38 de valute cu cursurile de referință BCE, graficul evoluției, valute cu paritate fixă, mod offline și 8 limbi.

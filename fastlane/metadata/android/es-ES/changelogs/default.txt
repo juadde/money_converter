@@ -1,0 +1,1 @@
+Primera versión: conversión al instante entre 38 divisas con los tipos de referencia del BCE, gráfico de evolución, divisas con paridad fija, modo sin conexión y 8 idiomas.

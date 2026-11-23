@@ -1,0 +1,25 @@
+Przeliczaj dowolne kwoty między 38 walutami po oficjalnych kursach referencyjnych Europejskiego Banku Centralnego (EBC).
+
+PRZELICZANIE NA BIEŻĄCO
+Wynik pojawia się podczas wpisywania. Wybierz obie waluty z listy z wyszukiwaniem po kodzie lub nazwie i zamień je jednym dotknięciem.
+
+KURSY EBC
+EBC publikuje kursy referencyjne w każdy dzień roboczy około 16:00 CET. Aplikacja pobiera je bezpośrednio ze źródła, z kopią zapasową, gdy strona EBC nie odpowiada.
+
+WYKRES ZMIAN
+Sprawdź, jak zmieniała się wybrana para w ciągu 1 tygodnia, 1 miesiąca lub 3 miesięcy. Dotknij wykresu, aby odczytać wartość z danego dnia.
+
+WALUTY O STAŁYM KURSIE DO EURO
+Oprócz walut EBC: escudo Zielonego Przylądka, franki CFA (BCEAO i BEAC), frank Komorów, frank CFP, marka zamienna Bośni i Hercegowiny oraz dobra Wysp Świętego Tomasza i Książęcej, obliczane na podstawie oficjalnego stałego kursu do euro.
+
+DZIAŁA OFFLINE
+Ostatnio pobrane kursy są dostępne bez połączenia.
+
+PROSTA I PRZYJAZNA
+• Bez reklam, bez konta, bez śledzenia
+• Żadne dane osobowe nie są zbierane
+• 8 języków: polski, angielski, francuski, niemiecki, hiszpański, włoski, rumuński, litewski
+• Jasny i ciemny motyw
+• Otwarty kod źródłowy na GitHubie
+
+Kursy EBC są kursami referencyjnymi i mają charakter informacyjny. Mogą różnić się od kursów stosowanych przez bank lub kantor.

@@ -32,3 +32,8 @@ coverage/
 /parts/
 /stage/
 /prime/
+
+# Generated store screenshots and their rates (see screenshots/)
+/screenshots/rates.json
+/fastlane/metadata/android/*/images/phoneScreenshots/
+/screenshots/failures/

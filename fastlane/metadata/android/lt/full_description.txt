@@ -1,0 +1,25 @@
+Konvertuokite bet kokią sumą tarp 38 valiutų pagal oficialius Europos Centrinio Banko (ECB) orientacinius kursus.
+
+KONVERTAVIMAS REALIUOJU LAIKU
+Rezultatas rodomas jums vedant sumą. Pasirinkite abi valiutas sąraše, ieškodami pagal kodą ar pavadinimą, ir sukeiskite jas vienu prisilietimu.
+
+ECB KURSAI
+ECB skelbia orientacinius kursus kiekvieną darbo dieną apie 16:00 CET. Programa juos gauna tiesiai iš šaltinio, o jei ECB svetainė neatsako – iš atsarginės kopijos.
+
+KITIMO GRAFIKAS
+Peržiūrėkite pasirinktos poros kitimą per 1 savaitę, 1 mėnesį ar 3 mėnesius. Palieskite grafiką, kad pamatytumėte konkrečios dienos reikšmę.
+
+VALIUTOS SU FIKSUOTU KURSU EURO ATŽVILGIU
+Be ECB valiutų: Žaliojo Kyšulio eskudas, CFA frankai (BCEAO ir BEAC), Komorų frankas, CFP frankas, Bosnijos ir Hercegovinos konvertuojamoji markė ir San Tomė ir Prinsipės dobra, apskaičiuojamos pagal oficialų fiksuotą kursą euro atžvilgiu.
+
+VEIKIA BE RYŠIO
+Paskutiniai atsisiųsti kursai lieka prieinami ir be interneto ryšio.
+
+PAPRASTA IR PAGARBI
+• Jokios reklamos, paskyros ar sekimo
+• Asmens duomenys nerenkami
+• 8 kalbos: lietuvių, anglų, prancūzų, vokiečių, ispanų, italų, lenkų, rumunų
+• Šviesi ir tamsi tema
+• Atvirasis kodas „GitHub“
+
+ECB kursai yra orientaciniai ir pateikiami tik informacijai. Jie gali skirtis nuo jūsų banko ar valiutos keityklos taikomų kursų.

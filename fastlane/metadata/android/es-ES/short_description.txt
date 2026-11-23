@@ -1,0 +1,1 @@
+Convierte divisas con los tipos de referencia oficiales del BCE, sin conexión.

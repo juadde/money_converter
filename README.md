@@ -89,13 +89,33 @@ dart run flutter_launcher_icons
 
 ## Play Store
 
-Le workflow `Play Store` construit un Android App Bundle (`.aab`) signé avec la clé d'importation et l'envoie sur Google Play. Le `versionCode` est le numéro de run du workflow, donc il augmente à chaque envoi. L'identifiant de l'appli est `com.juadde.moneyconverter` ; il ne pourra plus changer une fois l'appli créée sur Google Play.
+Le workflow `Play Store` construit un Android App Bundle (`.aab`) signé avec la clé d'importation et le publie sur Google Play avec [fastlane](https://docs.fastlane.tools/actions/upload_to_play_store/), en même temps que la fiche complète : textes, nouveautés, icône, image de présentation et captures d'écran. Le `versionCode` est le numéro de run du workflow, donc il augmente à chaque envoi. L'identifiant de l'appli est `com.juadde.moneyconverter` ; il ne pourra plus changer une fois l'appli créée sur Google Play.
 
 | Déclencheur | Ce qui se passe |
 | --- | --- |
 | Push sur `main` | Rien tant que la variable `PLAY_STORE_ENABLED` ne vaut pas `true` ; ensuite, envoi sur la piste `PLAY_TRACK` (par défaut `internal`) |
 | Lancement manuel (onglet Actions) | Build et envoi sur la piste choisie ; sans compte de service, le bundle est seulement disponible en artefact du run |
 | PR qui modifie le workflow ou le script | Build d'essai avec une clé jetable, rien n'est envoyé |
+
+### Fiche du Play Store
+
+Toute la fiche est dans le dépôt et publiée avec chaque version, pour les 8 langues (`fastlane/metadata/android/<langue>/`) :
+
+| Fichier | Contenu | Limite |
+| --- | --- | --- |
+| `title.txt` | Nom de l'appli | 30 caractères |
+| `short_description.txt` | Description courte | 80 caractères |
+| `full_description.txt` | Description complète | 4 000 caractères |
+| `changelogs/default.txt` | Nouveautés de la version (« What's new ») | 500 caractères |
+| `images/icon.png`, `images/featureGraphic.png` | Icône 512 px et image de présentation 1024 × 500 (`tool/store_graphics.py`) | |
+| `images/phoneScreenshots/` | 4 captures 1080 × 1920, **générées** à chaque publication par `screenshots/screenshots_test.dart` avec les taux BCE du jour | |
+
+`tool/check_store_metadata.py` vérifie les limites (lancé par la CI). Pour voir les captures en local :
+
+```sh
+python3 tool/ecb_to_json.py --output screenshots/rates.json
+flutter test --update-goldens screenshots/
+```
 
 ### Mise en place (une seule fois)
 

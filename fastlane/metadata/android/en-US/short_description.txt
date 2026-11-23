@@ -1,0 +1,1 @@
+Convert currencies with the official ECB reference rates, even offline.

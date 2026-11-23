@@ -1,0 +1,1 @@
+Währungen umrechnen mit den offiziellen EZB-Referenzkursen, auch offline.

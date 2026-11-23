@@ -1,0 +1,1 @@
+Première version : conversion en direct entre 38 devises avec les taux de référence de la BCE, graphique de l'évolution, devises à parité fixe, mode hors ligne et 8 langues.

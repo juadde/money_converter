@@ -1,0 +1,1 @@
+Konvertuokite valiutas pagal oficialius ECB orientacinius kursus, ir be ryšio.

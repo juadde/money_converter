@@ -1,0 +1,25 @@
+Convert any amount between 38 currencies with the official reference rates of the European Central Bank (ECB).
+
+LIVE CONVERSION
+The result appears as you type. Pick both currencies from a searchable list, by code or by name, and swap them in one tap.
+
+ECB RATES
+The ECB publishes its reference rates every working day around 16:00 CET. The app fetches them straight from the source, with a backup copy if the ECB website does not answer.
+
+HISTORY CHART
+See how the selected pair moved over 1 week, 1 month or 3 months. Touch the chart to read the value of a given day.
+
+CURRENCIES PEGGED TO THE EURO
+On top of the ECB currencies: Cape Verdean escudo, CFA francs (WAEMU and CEMAC), Comorian franc, CFP franc, Bosnia-Herzegovina convertible mark and São Tomé and Príncipe dobra, computed from their official parity with the euro.
+
+WORKS OFFLINE
+The last downloaded rates stay available without a connection.
+
+SIMPLE AND RESPECTFUL
+• No ads, no account, no trackers
+• No personal data collected
+• 8 languages: English, French, German, Spanish, Italian, Polish, Romanian, Lithuanian
+• Light and dark theme
+• Open source on GitHub
+
+ECB rates are reference rates, for information only. They may differ from the rates applied by your bank or an exchange office.
