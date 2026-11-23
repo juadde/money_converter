@@ -16,6 +16,8 @@ Application Flutter : Android, iOS, web, Windows et Linux avec une seule base de
 - Drapeaux en SVG (paquet `country_flags`), visibles sur toutes les plateformes, y compris Windows et Linux.
 - Français, anglais, allemand, espagnol, italien, polonais, roumain et lituanien : langue de l'appareil par défaut (anglais si elle n'est pas traduite), modifiable dans l'appli et mémorisée ; thème clair et sombre.
 
+Règles de confidentialité (exigées par les boutiques) : `site/privacy.html`, publiées sur https://juadde.github.io/money_converter/privacy.html.
+
 ## D'où viennent les taux
 
 1. **BCE en direct** : `eurofxref-hist-90d.xml` (90 jours, donc le taux du jour et l'historique en une requête).
