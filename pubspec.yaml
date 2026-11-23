@@ -54,6 +54,8 @@ msix_config:
   display_name: Money Converter
   publisher_display_name: juadde
   identity_name: com.juadde.moneyconverter
+  # Placeholder: the Store publisher comes from the MSSTORE_PUBLISHER variable.
+  publisher: CN=00000000-0000-0000-0000-000000000000
   logo_path: assets/icon/icon.png
   capabilities: internetClient
   languages: fr-fr, en-us
