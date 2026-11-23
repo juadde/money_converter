@@ -379,7 +379,7 @@ class _HistoryCardState extends State<_HistoryCard> {
 
     final children = <Widget>[
       Text(
-        '${strings.history} · ${widget.from} → ${widget.to}',
+        '${strings.history} · ${widget.from}/${widget.to}',
         style: theme.textTheme.titleMedium,
       ),
       const SizedBox(height: 8),
