@@ -59,8 +59,11 @@ void main() {
       expect(day.rate('USD', 'XXX'), isNull);
     });
 
-    test('lists currencies sorted', () {
-      expect(snapshot.currencies, ['EUR', 'JPY', 'USD', 'ZAR']);
+    test('lists currencies sorted, with the euro-pegged ones', () {
+      expect(snapshot.currencies, [
+        'BAM', 'CVE', 'EUR', 'JPY', 'KMF', 'STN', //
+        'USD', 'XAF', 'XOF', 'XPF', 'ZAR',
+      ]);
     });
 
     test('builds the history oldest first', () {

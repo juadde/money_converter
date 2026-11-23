@@ -1,3 +1,5 @@
+import 'euro_pegs.dart';
+
 /// ECB reference rates published for one business day.
 class DailyRates {
   const DailyRates({required this.date, required this.rates});
@@ -7,10 +9,13 @@ class DailyRates {
   /// Units of each currency for 1 EUR. Always contains `EUR: 1`.
   final Map<String, double> rates;
 
+  /// Units of [currency] for 1 EUR: ECB rate, or fixed parity with the euro.
+  double? perEuro(String currency) => rates[currency] ?? euroPegs[currency];
+
   /// How many [to] you get for one [from], or null if a currency is missing.
   double? rate(String from, String to) {
-    final f = rates[from];
-    final t = rates[to];
+    final f = perEuro(from);
+    final t = perEuro(to);
     if (f == null || t == null || f <= 0) return null;
     return t / f;
   }
@@ -44,7 +49,9 @@ class RatesSnapshot {
 
   DailyRates get latest => days.first;
 
-  List<String> get currencies => latest.rates.keys.toList()..sort();
+  /// ECB currencies plus the currencies pegged to the euro, sorted.
+  List<String> get currencies =>
+      {...latest.rates.keys, ...euroPegs.keys}.toList()..sort();
 
   /// Rate history for a pair, oldest first, limited to the last [maxDays]
   /// calendar days before the latest publication.

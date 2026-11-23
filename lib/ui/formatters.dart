@@ -22,6 +22,14 @@ String formatRate(double value, String locale) {
   return _fixed(value, digits, locale);
 }
 
+/// A fixed parity, with all its significant decimals (110.265, 655.957).
+String formatParity(double value, String locale) {
+  final format = NumberFormat.decimalPattern(locale)
+    ..minimumFractionDigits = 0
+    ..maximumFractionDigits = 5;
+  return format.format(value);
+}
+
 /// A signed percentage such as `+1.25 %`.
 String formatPercent(double value, String locale) {
   final sign = value > 0 ? '+' : '';
@@ -49,6 +57,10 @@ double? parseAmount(String text) {
 /// Flag emoji for a currency: the first two letters of an ISO 4217 code are
 /// the country code (EUR gives the EU flag).
 String flagOf(String currency) {
+  // Currencies shared by several countries (CFA and CFP francs).
+  const shared = {'XOF': '🌍', 'XAF': '🌍', 'XPF': '🌏'};
+  final sharedFlag = shared[currency];
+  if (sharedFlag != null) return sharedFlag;
   if (currency.length < 2) return '';
   const a = 0x41;
   const regionalIndicatorA = 0x1F1E6;

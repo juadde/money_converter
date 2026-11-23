@@ -9,6 +9,7 @@ Application Flutter : Android, iOS, web, Windows et Linux avec une seule base de
 ## Fonctionnalités
 
 - Conversion en direct pendant la frappe, entre toutes les devises publiées par la BCE (plus l'euro).
+- Devises à parité fixe avec l'euro, que la BCE ne publie pas : escudo cap-verdien (CVE), francs CFA (XOF, XAF), franc comorien (KMF), franc pacifique (XPF), mark convertible bosnien (BAM) et dobra (STN). Leurs taux viennent de la parité officielle et des taux BCE du jour (`lib/models/euro_pegs.dart`).
 - Inversion de la paire, recherche de devise par code ou par nom.
 - Taux du jour et graphique des valeurs passées (1 semaine, 1 mois, 3 mois) ; toucher le graphique affiche la valeur d'un jour.
 - Fonctionne hors ligne avec les derniers taux enregistrés.
