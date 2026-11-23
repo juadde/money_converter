@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../l10n/app_strings.dart';
+import '../models/euro_pegs.dart';
 import 'formatters.dart';
 
 /// Opens a searchable list of currencies and returns the chosen code.
@@ -80,7 +81,12 @@ class _CurrencyPickerState extends State<_CurrencyPicker> {
                             style: const TextStyle(fontSize: 24),
                           ),
                           title: Text(code),
-                          subtitle: Text(strings.currencyName(code)),
+                          subtitle: Text(
+                            isEuroPegged(code)
+                                ? '${strings.currencyName(code)} · '
+                                    '${strings.fixedParity}'
+                                : strings.currencyName(code),
+                          ),
                           trailing: code == widget.selected
                               ? const Icon(Icons.check)
                               : null,

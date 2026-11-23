@@ -72,6 +72,24 @@ void main() {
     expect(resultText(tester), '2,000.00 ZAR');
   });
 
+  testWidgets('converts to a currency pegged to the euro', (tester) async {
+    await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
+
+    await tester.tap(find.byKey(const Key('to-currency')));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const Key('currency-search')), 'cape');
+    await tester.pumpAndSettle();
+    expect(find.text('Cape Verdean escudo · fixed parity'), findsOneWidget);
+    await tester.tap(find.text('CVE'));
+    await tester.pumpAndSettle();
+
+    expect(resultText(tester), '11,026.50 CVE');
+    expect(
+      find.text('CVE: fixed parity with the euro, 1 EUR = 110.265 CVE'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('shows an error with a retry button when nothing loads',
       (tester) async {
     final source = FakeSource('ecb', null);

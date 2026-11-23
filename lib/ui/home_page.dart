@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/app_strings.dart';
+import '../models/euro_pegs.dart';
 import '../models/rates.dart';
 import '../state/providers.dart';
 import 'currency_picker.dart';
@@ -197,6 +198,21 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ),
               ],
+              for (final code in {from, to})
+                if (isEuroPegged(code)) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    strings.parityNote(
+                      code,
+                      formatParity(euroPegs[code]!, locale),
+                    ),
+                    key: Key('parity-$code'),
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
             ],
           ),
         ),

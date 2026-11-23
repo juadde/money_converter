@@ -54,6 +54,13 @@ class AppStrings {
       : 'European Central Bank reference rates, published every working '
           'day around 16:00 CET. For information only.';
 
+  String get fixedParity => _fr ? 'parité fixe' : 'fixed parity';
+
+  /// For example "CVE : parité fixe avec l'euro, 1 EUR = 110,265 CVE".
+  String parityNote(String code, String perEuro) => _fr
+      ? '$code : parité fixe avec l\'euro, 1 EUR = $perEuro $code'
+      : '$code: fixed parity with the euro, 1 EUR = $perEuro $code';
+
   String ratesOf(String date) =>
       _fr ? 'Taux du $date' : 'Rates of $date';
 
@@ -75,11 +82,13 @@ class AppStrings {
 
   static const _namesEn = <String, String>{
     'AUD': 'Australian dollar',
+    'BAM': 'Bosnia-Herzegovina convertible mark',
     'BGN': 'Bulgarian lev',
     'BRL': 'Brazilian real',
     'CAD': 'Canadian dollar',
     'CHF': 'Swiss franc',
     'CNY': 'Chinese yuan renminbi',
+    'CVE': 'Cape Verdean escudo',
     'CZK': 'Czech koruna',
     'DKK': 'Danish krone',
     'EUR': 'Euro',
@@ -91,6 +100,7 @@ class AppStrings {
     'INR': 'Indian rupee',
     'ISK': 'Icelandic krona',
     'JPY': 'Japanese yen',
+    'KMF': 'Comorian franc',
     'KRW': 'South Korean won',
     'MXN': 'Mexican peso',
     'MYR': 'Malaysian ringgit',
@@ -101,19 +111,25 @@ class AppStrings {
     'RON': 'Romanian leu',
     'SEK': 'Swedish krona',
     'SGD': 'Singapore dollar',
+    'STN': 'São Tomé and Príncipe dobra',
     'THB': 'Thai baht',
     'TRY': 'Turkish lira',
     'USD': 'US dollar',
+    'XAF': 'Central African CFA franc',
+    'XOF': 'West African CFA franc',
+    'XPF': 'CFP franc',
     'ZAR': 'South African rand',
   };
 
   static const _namesFr = <String, String>{
     'AUD': 'Dollar australien',
+    'BAM': 'Mark convertible bosnien',
     'BGN': 'Lev bulgare',
     'BRL': 'Réal brésilien',
     'CAD': 'Dollar canadien',
     'CHF': 'Franc suisse',
     'CNY': 'Yuan renminbi chinois',
+    'CVE': 'Escudo cap-verdien',
     'CZK': 'Couronne tchèque',
     'DKK': 'Couronne danoise',
     'EUR': 'Euro',
@@ -125,6 +141,7 @@ class AppStrings {
     'INR': 'Roupie indienne',
     'ISK': 'Couronne islandaise',
     'JPY': 'Yen japonais',
+    'KMF': 'Franc comorien',
     'KRW': 'Won sud-coréen',
     'MXN': 'Peso mexicain',
     'MYR': 'Ringgit malaisien',
@@ -135,9 +152,13 @@ class AppStrings {
     'RON': 'Leu roumain',
     'SEK': 'Couronne suédoise',
     'SGD': 'Dollar de Singapour',
+    'STN': 'Dobra de Sao Tomé-et-Principe',
     'THB': 'Baht thaïlandais',
     'TRY': 'Livre turque',
     'USD': 'Dollar américain',
+    'XAF': 'Franc CFA (CEMAC)',
+    'XOF': 'Franc CFA (UEMOA)',
+    'XPF': 'Franc pacifique',
     'ZAR': 'Rand sud-africain',
   };
 }
