@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  country_flags: ^4.1.2
   flutter_riverpod: ^2.6.1
   http: ^1.2.2
   intl: any
@@ -58,4 +59,4 @@ msix_config:
   publisher: CN=00000000-0000-0000-0000-000000000000
   logo_path: assets/icon/icon.png
   capabilities: internetClient
-  languages: fr-fr, en-us
+  languages: en-us, fr-fr, de-de, es-es, it-it, pl-pl, ro-ro, lt-lt

@@ -91,9 +91,10 @@ void main() {
       expect(formatPercent(1.5, 'en'), '+1.50 %');
     });
 
-    test('flagOf builds regional indicator pairs', () {
-      expect(flagOf('EUR'), '\u{1F1EA}\u{1F1FA}');
-      expect(flagOf('1'), '');
+    test('flagCountryOf maps currencies to flag countries', () {
+      expect(flagCountryOf('EUR'), 'EU');
+      expect(flagCountryOf('USD'), 'US');
+      expect(flagCountryOf('1'), isNull);
     });
   });
 }

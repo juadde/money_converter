@@ -9,6 +9,7 @@ import '../models/euro_pegs.dart';
 import '../models/rates.dart';
 import '../state/providers.dart';
 import 'currency_picker.dart';
+import 'flag_icon.dart';
 import 'formatters.dart';
 import 'rate_chart.dart';
 
@@ -52,6 +53,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppBar(
         title: Text(strings.appTitle),
         actions: [
+          const _LanguageMenu(),
           IconButton(
             icon: const Icon(Icons.refresh),
             tooltip: strings.refresh,
@@ -261,7 +263,7 @@ class _CurrencyButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(flagOf(code), style: const TextStyle(fontSize: 22)),
+            CurrencyFlag(code),
             const SizedBox(width: 6),
             Text(code, style: Theme.of(context).textTheme.titleMedium),
             const Icon(Icons.arrow_drop_down),
@@ -476,6 +478,65 @@ class _HistoryCardState extends State<_HistoryCard> {
           children: children,
         ),
       ),
+    );
+  }
+}
+
+/// App bar menu to pick the language; the choice is remembered.
+class _LanguageMenu extends ConsumerWidget {
+  const _LanguageMenu();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = AppStrings.of(context);
+    final current = ref.watch(languageProvider)?.languageCode;
+
+    PopupMenuItem<String> item(String value, Widget leading, String label) {
+      return PopupMenuItem<String>(
+        key: Key('language-$value'),
+        value: value,
+        child: Row(
+          children: [
+            SizedBox(
+              width: 36,
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: leading,
+              ),
+            ),
+            Expanded(child: Text(label)),
+            if (value == (current ?? 'system'))
+              const Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Icon(Icons.check, size: 20),
+              ),
+          ],
+        ),
+      );
+    }
+
+    return PopupMenuButton<String>(
+      key: const Key('language-menu'),
+      icon: const Icon(Icons.translate),
+      tooltip: strings.language,
+      onSelected: (value) => ref
+          .read(languageProvider.notifier)
+          .set(value == 'system' ? null : Locale(value)),
+      itemBuilder: (context) => [
+        item(
+          'system',
+          const Icon(Icons.smartphone, size: 20),
+          strings.deviceLanguage,
+        ),
+        const PopupMenuDivider(),
+        for (final locale in AppStrings.supportedLocales)
+          item(
+            locale.languageCode,
+            LanguageFlag(locale.languageCode),
+            AppStrings.languageNames[locale.languageCode] ??
+                locale.languageCode,
+          ),
+      ],
     );
   }
 }
