@@ -75,6 +75,23 @@ jobs:
           flutter test --update-goldens screenshots/
           ls fastlane/metadata/android/*/images/phoneScreenshots/
 
+      - name: TEMP contact sheet in the log
+        if: env.DRY_RUN == 'true'
+        run: |
+          pip install --quiet pillow
+          python3 - <<'PY'
+          import base64, glob, io
+          from PIL import Image
+          for loc in ['fr-FR', 'en-US', 'de-DE', 'lt']:
+              files = sorted(glob.glob(f'fastlane/metadata/android/{loc}/images/phoneScreenshots/*.png'))
+              ims = [Image.open(f).convert('RGB').resize((432, 768)) for f in files]
+              sheet = Image.new('RGB', (432 * len(ims), 768), 'white')
+              for i, im in enumerate(ims):
+                  sheet.paste(im, (432 * i, 0))
+              buf = io.BytesIO(); sheet.save(buf, 'JPEG', quality=80)
+              print(f'SHEET-BEGIN {loc}'); print(base64.b64encode(buf.getvalue()).decode()); print('SHEET-END')
+          PY
+
       - uses: actions/upload-artifact@v4
         with:
           name: store-listing-${{ github.run_number }}

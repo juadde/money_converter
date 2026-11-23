@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // Store screenshots, rendered by a widget test with the real fonts and the
 // real ECB rates of the day.
 //
