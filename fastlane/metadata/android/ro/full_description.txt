@@ -1,0 +1,25 @@
+Convertește orice sumă între 38 de valute cu cursurile oficiale de referință ale Băncii Centrale Europene (BCE).
+
+CONVERSIE ÎN TIMP REAL
+Rezultatul apare pe măsură ce tastezi. Alege cele două valute dintr-o listă cu căutare după cod sau nume și inversează-le cu o atingere.
+
+CURSURILE BCE
+BCE publică cursurile de referință în fiecare zi lucrătoare în jurul orei 16:00 CET. Aplicația le preia direct de la sursă, cu o copie de rezervă dacă site-ul BCE nu răspunde.
+
+GRAFICUL EVOLUȚIEI
+Urmărește evoluția perechii alese pe 1 săptămână, 1 lună sau 3 luni. Atinge graficul pentru a citi valoarea dintr-o anumită zi.
+
+VALUTE CU PARITATE FIXĂ
+În plus față de valutele BCE: escudo capverdian, francii CFA (BCEAO și BEAC), francul comorian, francul CFP, marca convertibilă bosniacă și dobra din São Tomé și Príncipe, calculate din paritatea lor oficială cu euro.
+
+FUNCȚIONEAZĂ OFFLINE
+Ultimele cursuri descărcate rămân disponibile fără conexiune.
+
+SIMPLĂ ȘI RESPECTUOASĂ
+• Fără reclame, fără cont, fără urmărire
+• Nu colectează date personale
+• 8 limbi: română, engleză, franceză, germană, spaniolă, italiană, poloneză, lituaniană
+• Temă deschisă și întunecată
+• Cod sursă deschis pe GitHub
+
+Cursurile BCE sunt cursuri de referință, cu titlu informativ. Pot diferi de cursurile aplicate de banca ta sau de o casă de schimb.

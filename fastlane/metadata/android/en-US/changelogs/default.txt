@@ -1,0 +1,1 @@
+First release: live conversion between 38 currencies with the ECB reference rates, history chart, currencies pegged to the euro, offline mode and 8 languages.

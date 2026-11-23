@@ -1,0 +1,1 @@
+Pirmoji versija: valiutų konvertavimas realiuoju laiku tarp 38 valiutų pagal ECB orientacinius kursus, kitimo grafikas, valiutos su fiksuotu kursu, veikimas be ryšio ir 8 kalbos.

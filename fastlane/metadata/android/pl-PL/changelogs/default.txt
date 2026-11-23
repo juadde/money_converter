@@ -1,0 +1,1 @@
+Pierwsza wersja: przeliczanie na bieżąco między 38 walutami po kursach referencyjnych EBC, wykres zmian, waluty o stałym kursie do euro, tryb offline i 8 języków.

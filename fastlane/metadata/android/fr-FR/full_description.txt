@@ -1,0 +1,25 @@
+Convertissez un montant entre 38 devises avec les taux de référence officiels de la Banque centrale européenne (BCE).
+
+CONVERSION EN DIRECT
+Le résultat s'affiche pendant que vous tapez. Choisissez les deux devises dans une liste avec recherche par code ou par nom, et inversez-les d'un geste.
+
+TAUX DE LA BCE
+La BCE publie ses taux de référence chaque jour ouvré vers 16 h (heure d'Europe centrale). L'appli les récupère directement à la source, avec une copie de secours si le site de la BCE ne répond pas.
+
+GRAPHIQUE DE L'ÉVOLUTION
+Visualisez l'évolution de la paire choisie sur 1 semaine, 1 mois ou 3 mois. Touchez le graphique pour lire la valeur d'un jour précis.
+
+MONNAIES À PARITÉ FIXE
+En plus des devises publiées par la BCE : escudo cap-verdien, francs CFA (UEMOA et CEMAC), franc comorien, franc pacifique, mark convertible bosnien et dobra de Sao Tomé-et-Principe, calculés à partir de leur parité officielle avec l'euro.
+
+HORS LIGNE
+Les derniers taux téléchargés restent disponibles sans connexion.
+
+SIMPLE ET RESPECTUEUSE
+• Sans publicité, sans compte, sans traceur
+• Aucune donnée personnelle collectée
+• 8 langues : français, anglais, allemand, espagnol, italien, polonais, roumain, lituanien
+• Thème clair et sombre
+• Code source ouvert sur GitHub
+
+Les taux de la BCE sont des taux de référence, donnés à titre indicatif. Ils peuvent différer des taux appliqués par votre banque ou un bureau de change.

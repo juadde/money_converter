@@ -1,0 +1,25 @@
+Rechnen Sie Beträge zwischen 38 Währungen um – mit den offiziellen Referenzkursen der Europäischen Zentralbank (EZB).
+
+LIVE-UMRECHNUNG
+Das Ergebnis erscheint während der Eingabe. Wählen Sie beide Währungen in einer durchsuchbaren Liste nach Code oder Name und tauschen Sie sie mit einem Tippen.
+
+EZB-KURSE
+Die EZB veröffentlicht ihre Referenzkurse an jedem Arbeitstag gegen 16:00 Uhr MEZ. Die App lädt sie direkt von der Quelle, mit einer Ersatzkopie, falls die EZB-Website nicht antwortet.
+
+VERLAUFSDIAGRAMM
+Verfolgen Sie das gewählte Währungspaar über 1 Woche, 1 Monat oder 3 Monate. Tippen Sie auf das Diagramm, um den Wert eines Tages abzulesen.
+
+WÄHRUNGEN MIT FESTEM EURO-KURS
+Zusätzlich zu den EZB-Währungen: Kap-Verde-Escudo, CFA-Franc (BCEAO und BEAC), Komoren-Franc, CFP-Franc, Konvertible Mark und São-toméischer Dobra, berechnet aus ihrem offiziellen festen Kurs zum Euro.
+
+OFFLINE NUTZBAR
+Die zuletzt geladenen Kurse bleiben ohne Verbindung verfügbar.
+
+EINFACH UND FAIR
+• Keine Werbung, kein Konto, kein Tracking
+• Keine Erhebung personenbezogener Daten
+• 8 Sprachen: Deutsch, Englisch, Französisch, Spanisch, Italienisch, Polnisch, Rumänisch, Litauisch
+• Helles und dunkles Design
+• Open Source auf GitHub
+
+Die EZB-Kurse sind Referenzkurse und dienen nur zur Information. Sie können von den Kursen Ihrer Bank oder Wechselstube abweichen.

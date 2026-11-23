@@ -1,0 +1,25 @@
+Convierte cualquier importe entre 38 divisas con los tipos de referencia oficiales del Banco Central Europeo (BCE).
+
+CONVERSIÓN AL INSTANTE
+El resultado aparece mientras escribes. Elige las dos divisas en una lista con búsqueda por código o por nombre e intercámbialas con un toque.
+
+TIPOS DEL BCE
+El BCE publica sus tipos de referencia cada día hábil hacia las 16:00 (CET). La app los obtiene directamente de la fuente, con una copia de respaldo si la web del BCE no responde.
+
+GRÁFICO DE EVOLUCIÓN
+Consulta la evolución del par elegido en 1 semana, 1 mes o 3 meses. Toca el gráfico para leer el valor de un día concreto.
+
+DIVISAS CON PARIDAD FIJA
+Además de las divisas del BCE: escudo caboverdiano, francos CFA (BCEAO y BEAC), franco comorense, franco CFP, marco convertible de Bosnia y Herzegovina y dobra santotomense, calculados a partir de su paridad oficial con el euro.
+
+SIN CONEXIÓN
+Los últimos tipos descargados siguen disponibles sin conexión.
+
+SENCILLA Y RESPETUOSA
+• Sin anuncios, sin cuenta, sin rastreadores
+• No recopila datos personales
+• 8 idiomas: español, inglés, francés, alemán, italiano, polaco, rumano, lituano
+• Tema claro y oscuro
+• Código abierto en GitHub
+
+Los tipos del BCE son tipos de referencia, solo orientativos. Pueden diferir de los que aplica tu banco o una casa de cambio.

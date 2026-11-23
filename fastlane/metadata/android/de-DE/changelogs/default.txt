@@ -1,0 +1,1 @@
+Erste Version: Live-Umrechnung zwischen 38 Währungen mit den EZB-Referenzkursen, Verlaufsdiagramm, Währungen mit festem Euro-Kurs, Offline-Modus und 8 Sprachen.

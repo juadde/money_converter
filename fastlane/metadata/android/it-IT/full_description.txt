@@ -1,0 +1,25 @@
+Converti qualsiasi importo tra 38 valute con i tassi di riferimento ufficiali della Banca centrale europea (BCE).
+
+CONVERSIONE ISTANTANEA
+Il risultato appare mentre scrivi. Scegli le due valute da un elenco con ricerca per codice o per nome e invertile con un tocco.
+
+TASSI DELLA BCE
+La BCE pubblica i tassi di riferimento ogni giorno lavorativo verso le 16:00 (CET). L'app li scarica direttamente dalla fonte, con una copia di riserva se il sito della BCE non risponde.
+
+GRAFICO DELL'ANDAMENTO
+Guarda l'andamento della coppia scelta su 1 settimana, 1 mese o 3 mesi. Tocca il grafico per leggere il valore di un giorno preciso.
+
+VALUTE A PARITÀ FISSA
+Oltre alle valute della BCE: escudo capoverdiano, franchi CFA (BCEAO e BEAC), franco delle Comore, franco CFP, marco convertibile bosniaco e dobra di São Tomé e Príncipe, calcolati dalla loro parità ufficiale con l'euro.
+
+FUNZIONA OFFLINE
+Gli ultimi tassi scaricati restano disponibili senza connessione.
+
+SEMPLICE E RISPETTOSA
+• Niente pubblicità, niente account, niente tracciamento
+• Nessun dato personale raccolto
+• 8 lingue: italiano, inglese, francese, tedesco, spagnolo, polacco, rumeno, lituano
+• Tema chiaro e scuro
+• Codice open source su GitHub
+
+I tassi della BCE sono tassi di riferimento, solo indicativi. Possono differire da quelli applicati dalla tua banca o da un cambiavalute.
