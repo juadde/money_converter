@@ -126,16 +126,32 @@ void main() {
     expect(find.text('Importe'), findsOneWidget);
   });
 
+  testWidgets('speaks Italian, Polish, Romanian and Lithuanian',
+      (tester) async {
+    setDeviceLocales(tester, const [Locale('ja', 'JP')]);
+    await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
+
+    for (final (code, label) in const [
+      ('it', 'Importo'),
+      ('pl', 'Kwota'),
+      ('ro', 'Sumă'),
+      ('lt', 'Suma'),
+    ]) {
+      await pickLanguage(tester, code);
+      expect(find.text(label), findsOneWidget, reason: code);
+    }
+  });
+
   testWidgets('falls back to English for an untranslated device language',
       (tester) async {
-    setDeviceLocales(tester, const [Locale('it', 'IT')]);
+    setDeviceLocales(tester, const [Locale('ja', 'JP')]);
     await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
 
     expect(find.text('Amount'), findsOneWidget);
   });
 
   testWidgets('switches language and remembers the choice', (tester) async {
-    setDeviceLocales(tester, const [Locale('it', 'IT')]);
+    setDeviceLocales(tester, const [Locale('ja', 'JP')]);
     await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
     final prefs = await SharedPreferences.getInstance();
 
