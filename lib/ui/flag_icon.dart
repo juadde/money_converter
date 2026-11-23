@@ -27,12 +27,17 @@ class CurrencyFlag extends StatelessWidget {
         ),
       );
     }
-    return CountryFlag.fromCountryCode(
-      country,
-      theme: ImageTheme(
-        width: width,
-        height: height,
-        shape: const RoundedRectangle(3),
+    // The fixed box keeps the flag from taking all the width it is given.
+    return SizedBox(
+      width: width,
+      height: height,
+      child: CountryFlag.fromCountryCode(
+        country,
+        theme: ImageTheme(
+          width: width,
+          height: height,
+          shape: const RoundedRectangle(3),
+        ),
       ),
     );
   }
@@ -48,12 +53,16 @@ class LanguageFlag extends StatelessWidget {
   final double width;
 
   @override
-  Widget build(BuildContext context) => CountryFlag.fromCountryCode(
-        _countries[languageCode] ?? languageCode.toUpperCase(),
-        theme: ImageTheme(
-          width: width,
-          height: width * 3 / 4,
-          shape: const RoundedRectangle(3),
+  Widget build(BuildContext context) => SizedBox(
+        width: width,
+        height: width * 3 / 4,
+        child: CountryFlag.fromCountryCode(
+          _countries[languageCode] ?? languageCode.toUpperCase(),
+          theme: ImageTheme(
+            width: width,
+            height: width * 3 / 4,
+            shape: const RoundedRectangle(3),
+          ),
         ),
       );
 }
