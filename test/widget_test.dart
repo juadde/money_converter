@@ -16,13 +16,13 @@ void main() {
   Future<void> pumpApp(
     WidgetTester tester,
     List<FakeSource> sources, {
-    Map<String, Object> prefs = const {},
+    Map<String, Object> savedPrefs = const {},
   }) async {
     SharedPreferences.setMockInitialValues({
       'from': 'EUR',
       'to': 'USD',
       'amount': '100',
-      ...prefs,
+      ...savedPrefs,
     });
     final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(
@@ -143,7 +143,7 @@ void main() {
     await pumpApp(
       tester,
       [FakeSource('ecb', sampleDays())],
-      prefs: {'language': 'fr'},
+      savedPrefs: {'language': 'fr'},
     );
 
     expect(find.text('Montant'), findsOneWidget);
