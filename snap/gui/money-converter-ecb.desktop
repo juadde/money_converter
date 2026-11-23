@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Money Converter
+Name[fr]=Convertisseur de devises
+Comment=Currency converter based on the ECB reference rates
+Comment[fr]=Convertisseur de devises basé sur les taux de la BCE
+Exec=money-converter-ecb
+Icon=${SNAP}/meta/gui/icon.png
+Categories=Office;Finance;Utility;
+Terminal=false
