@@ -2,10 +2,11 @@ name: Desktop
 
 # Builds the Linux (snap) and Windows (MSIX) packages and publishes them.
 #
-# - push on main / manual run: build, keep the packages as run artifacts,
-#   then publish to each store whose credentials are configured
-#   (SNAPCRAFT_STORE_CREDENTIALS for the Snap Store, the PARTNER_CENTER_*
-#   secrets for the Microsoft Store);
+# - push on main: build and keep the packages as run artifacts; publish to
+#   the Snap Store once the SNAP_STORE_ENABLED variable is "true", to the
+#   Microsoft Store once MSSTORE_ENABLED is "true";
+# - manual run (Actions tab): build, then publish to each store whose
+#   credentials are configured (SNAPCRAFT_STORE_CREDENTIALS, PARTNER_CENTER_*);
 # - pull request touching the packaging: build only, nothing is published.
 #
 # Setup: see "Windows et Linux" in the README.
@@ -33,7 +34,7 @@ jobs:
     name: Linux snap
     runs-on: ubuntu-24.04
     env:
-      PUBLISH: ${{ github.event_name != 'pull_request' && secrets.SNAPCRAFT_STORE_CREDENTIALS != '' }}
+      PUBLISH: ${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && vars.SNAP_STORE_ENABLED == 'true')) && secrets.SNAPCRAFT_STORE_CREDENTIALS != '' }}
     steps:
       - uses: actions/checkout@v5
       - name: Linux build dependencies
@@ -79,7 +80,7 @@ jobs:
       run:
         shell: bash
     env:
-      PUBLISH: ${{ github.event_name != 'pull_request' && secrets.PARTNER_CENTER_CLIENT_SECRET != '' }}
+      PUBLISH: ${{ (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && vars.MSSTORE_ENABLED == 'true')) && secrets.PARTNER_CENTER_CLIENT_SECRET != '' }}
       MSIX: build/msix/moneyconverter.msix
     steps:
       - uses: actions/checkout@v5
