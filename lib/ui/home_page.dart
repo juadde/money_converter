@@ -52,6 +52,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: AppBar(
         title: Text(strings.appTitle),
         actions: [
+          const _LanguageMenu(),
           IconButton(
             icon: const Icon(Icons.refresh),
             tooltip: strings.refresh,
@@ -476,6 +477,55 @@ class _HistoryCardState extends State<_HistoryCard> {
           children: children,
         ),
       ),
+    );
+  }
+}
+
+/// App bar menu to pick the language; the choice is remembered.
+class _LanguageMenu extends ConsumerWidget {
+  const _LanguageMenu();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = AppStrings.of(context);
+    final current = ref.watch(languageProvider)?.languageCode;
+
+    PopupMenuItem<String> item(String value, String leading, String label) {
+      return PopupMenuItem<String>(
+        key: Key('language-$value'),
+        value: value,
+        child: Row(
+          children: [
+            SizedBox(width: 32, child: Text(leading)),
+            Expanded(child: Text(label)),
+            if (value == (current ?? 'system'))
+              const Padding(
+                padding: EdgeInsets.only(left: 12),
+                child: Icon(Icons.check, size: 20),
+              ),
+          ],
+        ),
+      );
+    }
+
+    return PopupMenuButton<String>(
+      key: const Key('language-menu'),
+      icon: const Icon(Icons.translate),
+      tooltip: strings.language,
+      onSelected: (value) => ref
+          .read(languageProvider.notifier)
+          .set(value == 'system' ? null : Locale(value)),
+      itemBuilder: (context) => [
+        item('system', '📱', strings.deviceLanguage),
+        const PopupMenuDivider(),
+        for (final locale in AppStrings.supportedLocales)
+          item(
+            locale.languageCode,
+            AppStrings.languageFlags[locale.languageCode] ?? '',
+            AppStrings.languageNames[locale.languageCode] ??
+                locale.languageCode,
+          ),
+      ],
     );
   }
 }

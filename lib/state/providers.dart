@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart' show Locale;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/config.dart';
 import '../data/rates_cache.dart';
 import '../data/rates_repository.dart';
+import '../l10n/app_strings.dart';
 import '../models/rates.dart';
 
 /// Overridden in `main()` with the real instance.
@@ -109,5 +111,33 @@ class ConverterController extends Notifier<ConverterState> {
     state = state.copyWith(from: from, to: to);
     _prefs.setString(_fromKey, from);
     _prefs.setString(_toKey, to);
+  }
+}
+
+/// Language chosen in the app: null follows the device (English when the
+/// device language has no translation).
+final languageProvider =
+    NotifierProvider<LanguageController, Locale?>(LanguageController.new);
+
+class LanguageController extends Notifier<Locale?> {
+  static const _key = 'language';
+
+  @override
+  Locale? build() {
+    final code = ref.watch(sharedPreferencesProvider).getString(_key);
+    final supported = AppStrings.supportedLocales
+        .any((locale) => locale.languageCode == code);
+    return supported ? Locale(code!) : null;
+  }
+
+  /// [locale] null means "device language".
+  Future<void> set(Locale? locale) async {
+    state = locale;
+    final prefs = ref.read(sharedPreferencesProvider);
+    if (locale == null) {
+      await prefs.remove(_key);
+    } else {
+      await prefs.setString(_key, locale.languageCode);
+    }
   }
 }

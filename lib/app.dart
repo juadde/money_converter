@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/app_strings.dart';
+import 'state/providers.dart';
 import 'ui/home_page.dart';
 
-class MoneyConverterApp extends StatelessWidget {
+class MoneyConverterApp extends ConsumerWidget {
   const MoneyConverterApp({super.key});
 
   static const _seed = Color(0xFF003399);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       onGenerateTitle: (context) => AppStrings.of(context).appTitle,
       debugShowCheckedModeBanner: false,
@@ -20,6 +22,9 @@ class MoneyConverterApp extends StatelessWidget {
         brightness: Brightness.dark,
         useMaterial3: true,
       ),
+      // Null follows the device language.
+      locale: ref.watch(languageProvider),
+      localeListResolutionCallback: (locales, _) => AppStrings.resolve(locales),
       localizationsDelegates: [
         AppStrings.delegate,
         ...GlobalMaterialLocalizations.delegates,

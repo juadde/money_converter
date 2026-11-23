@@ -54,6 +54,25 @@ class AppStrings {
       : 'European Central Bank reference rates, published every working '
           'day around 16:00 CET. For information only.';
 
+  String get language => _fr ? 'Langue' : 'Language';
+  String get deviceLanguage =>
+      _fr ? 'Langue de l\'appareil' : 'Device language';
+
+  /// Each language is named in itself, so it can be found whatever the
+  /// current language.
+  static const languageNames = {'en': 'English', 'fr': 'Français'};
+  static const languageFlags = {'en': '🇬🇧', 'fr': '🇫🇷'};
+
+  /// Picks the first device language that has a translation, else English.
+  static Locale resolve(List<Locale>? deviceLocales) {
+    for (final device in deviceLocales ?? const <Locale>[]) {
+      for (final supported in supportedLocales) {
+        if (supported.languageCode == device.languageCode) return supported;
+      }
+    }
+    return const Locale('en');
+  }
+
   String get fixedParity => _fr ? 'parité fixe' : 'fixed parity';
 
   /// For example "CVE : parité fixe avec l'euro, 1 EUR = 110,265 CVE".

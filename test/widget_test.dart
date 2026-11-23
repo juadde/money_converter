@@ -13,11 +13,16 @@ import 'support.dart';
 void main() {
   setUpAll(() => initializeDateFormatting());
 
-  Future<void> pumpApp(WidgetTester tester, List<FakeSource> sources) async {
+  Future<void> pumpApp(
+    WidgetTester tester,
+    List<FakeSource> sources, {
+    Map<String, Object> prefs = const {},
+  }) async {
     SharedPreferences.setMockInitialValues({
       'from': 'EUR',
       'to': 'USD',
       'amount': '100',
+      ...prefs,
     });
     final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(
@@ -88,6 +93,60 @@ void main() {
       find.text('CVE: fixed parity with the euro, 1 EUR = 110.265 CVE'),
       findsOneWidget,
     );
+  });
+
+  void setDeviceLocales(WidgetTester tester, List<Locale> locales) {
+    tester.platformDispatcher.localesTestValue = locales;
+    addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+  }
+
+  Future<void> pickLanguage(WidgetTester tester, String value) async {
+    await tester.tap(find.byKey(const Key('language-menu')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key('language-$value')));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('follows the device language when it is translated',
+      (tester) async {
+    setDeviceLocales(tester, const [Locale('fr', 'FR')]);
+    await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
+
+    expect(find.text('Montant'), findsOneWidget);
+    expect(resultText(tester), '200,00 USD');
+  });
+
+  testWidgets('falls back to English for an untranslated device language',
+      (tester) async {
+    setDeviceLocales(tester, const [Locale('de', 'DE')]);
+    await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
+
+    expect(find.text('Amount'), findsOneWidget);
+  });
+
+  testWidgets('switches language and remembers the choice', (tester) async {
+    setDeviceLocales(tester, const [Locale('de', 'DE')]);
+    await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
+    final prefs = await SharedPreferences.getInstance();
+
+    await pickLanguage(tester, 'fr');
+    expect(find.text('Montant'), findsOneWidget);
+    expect(prefs.getString('language'), 'fr');
+
+    await pickLanguage(tester, 'system');
+    expect(find.text('Amount'), findsOneWidget);
+    expect(prefs.getString('language'), isNull);
+  });
+
+  testWidgets('starts in the saved language', (tester) async {
+    setDeviceLocales(tester, const [Locale('en', 'US')]);
+    await pumpApp(
+      tester,
+      [FakeSource('ecb', sampleDays())],
+      prefs: {'language': 'fr'},
+    );
+
+    expect(find.text('Montant'), findsOneWidget);
   });
 
   testWidgets('shows an error with a retry button when nothing loads',
