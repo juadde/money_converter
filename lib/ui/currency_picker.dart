@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_strings.dart';
 import '../models/euro_pegs.dart';
-import 'formatters.dart';
+import 'flag_icon.dart';
 
 /// Opens a searchable list of currencies and returns the chosen code.
 Future<String?> showCurrencyPicker(
@@ -76,10 +76,7 @@ class _CurrencyPickerState extends State<_CurrencyPicker> {
                       itemBuilder: (context, index) {
                         final code = matches[index];
                         return ListTile(
-                          leading: Text(
-                            flagOf(code),
-                            style: const TextStyle(fontSize: 24),
-                          ),
+                          leading: CurrencyFlag(code, width: 32),
                           title: Text(code),
                           subtitle: Text(
                             isEuroPegged(code)

@@ -13,6 +13,7 @@ Application Flutter : Android, iOS, web, Windows et Linux avec une seule base de
 - Inversion de la paire, recherche de devise par code ou par nom.
 - Taux du jour et graphique des valeurs passées (1 semaine, 1 mois, 3 mois) ; toucher le graphique affiche la valeur d'un jour.
 - Fonctionne hors ligne avec les derniers taux enregistrés.
+- Drapeaux en SVG (paquet `country_flags`), visibles sur toutes les plateformes, y compris Windows et Linux.
 - Français et anglais : langue de l'appareil par défaut (anglais si elle n'est pas traduite), modifiable dans l'appli et mémorisée ; thème clair et sombre.
 
 ## D'où viennent les taux

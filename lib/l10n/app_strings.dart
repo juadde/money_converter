@@ -61,7 +61,6 @@ class AppStrings {
   /// Each language is named in itself, so it can be found whatever the
   /// current language.
   static const languageNames = {'en': 'English', 'fr': 'Français'};
-  static const languageFlags = {'en': '🇬🇧', 'fr': '🇫🇷'};
 
   /// Picks the first device language that has a translation, else English.
   static Locale resolve(List<Locale>? deviceLocales) {

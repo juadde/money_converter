@@ -50,7 +50,7 @@ void main() {
     expect(formatParity(110.265, 'fr'), '110,265');
     expect(formatParity(491.96775, 'en'), '491.96775');
     expect(formatParity(24.5, 'en'), '24.5');
-    expect(flagOf('XOF'), '🌍');
-    expect(flagOf('CVE'), '\u{1F1E8}\u{1F1FB}');
+    expect(flagCountryOf('XOF'), isNull);
+    expect(flagCountryOf('CVE'), 'CV');
   });
 }

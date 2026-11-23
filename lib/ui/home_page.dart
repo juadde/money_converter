@@ -9,6 +9,7 @@ import '../models/euro_pegs.dart';
 import '../models/rates.dart';
 import '../state/providers.dart';
 import 'currency_picker.dart';
+import 'flag_icon.dart';
 import 'formatters.dart';
 import 'rate_chart.dart';
 
@@ -262,7 +263,7 @@ class _CurrencyButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(flagOf(code), style: const TextStyle(fontSize: 22)),
+            CurrencyFlag(code),
             const SizedBox(width: 6),
             Text(code, style: Theme.of(context).textTheme.titleMedium),
             const Icon(Icons.arrow_drop_down),
@@ -490,13 +491,19 @@ class _LanguageMenu extends ConsumerWidget {
     final strings = AppStrings.of(context);
     final current = ref.watch(languageProvider)?.languageCode;
 
-    PopupMenuItem<String> item(String value, String leading, String label) {
+    PopupMenuItem<String> item(String value, Widget leading, String label) {
       return PopupMenuItem<String>(
         key: Key('language-$value'),
         value: value,
         child: Row(
           children: [
-            SizedBox(width: 32, child: Text(leading)),
+            SizedBox(
+              width: 36,
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: leading,
+              ),
+            ),
             Expanded(child: Text(label)),
             if (value == (current ?? 'system'))
               const Padding(
@@ -516,12 +523,16 @@ class _LanguageMenu extends ConsumerWidget {
           .read(languageProvider.notifier)
           .set(value == 'system' ? null : Locale(value)),
       itemBuilder: (context) => [
-        item('system', '📱', strings.deviceLanguage),
+        item(
+          'system',
+          const Icon(Icons.smartphone, size: 20),
+          strings.deviceLanguage,
+        ),
         const PopupMenuDivider(),
         for (final locale in AppStrings.supportedLocales)
           item(
             locale.languageCode,
-            AppStrings.languageFlags[locale.languageCode] ?? '',
+            LanguageFlag(locale.languageCode),
             AppStrings.languageNames[locale.languageCode] ??
                 locale.languageCode,
           ),

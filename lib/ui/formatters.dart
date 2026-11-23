@@ -54,21 +54,12 @@ double? parseAmount(String text) {
   return value;
 }
 
-/// Flag emoji for a currency: the first two letters of an ISO 4217 code are
-/// the country code (EUR gives the EU flag).
-String flagOf(String currency) {
-  // Currencies shared by several countries (CFA and CFP francs).
-  const shared = {'XOF': '🌍', 'XAF': '🌍', 'XPF': '🌏'};
-  final sharedFlag = shared[currency];
-  if (sharedFlag != null) return sharedFlag;
-  if (currency.length < 2) return '';
-  const a = 0x41;
-  const regionalIndicatorA = 0x1F1E6;
-  final first = currency.codeUnitAt(0) - a;
-  final second = currency.codeUnitAt(1) - a;
-  if (first < 0 || first > 25 || second < 0 || second > 25) return '';
-  return String.fromCharCodes([
-    regionalIndicatorA + first,
-    regionalIndicatorA + second,
-  ]);
+/// Country whose flag stands for a currency: the first two letters of an
+/// ISO 4217 code are the country code, EUR gives the EU flag. Null for the
+/// currencies shared by several countries (CFA and CFP francs).
+String? flagCountryOf(String currency) {
+  if (currency == 'EUR') return 'EU';
+  if (const {'XOF', 'XAF', 'XPF'}.contains(currency)) return null;
+  if (!RegExp(r'^[A-Z]{2}').hasMatch(currency)) return null;
+  return currency.substring(0, 2);
 }
