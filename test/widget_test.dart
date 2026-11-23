@@ -6,6 +6,7 @@ import 'package:moneyconverter/app.dart';
 import 'package:moneyconverter/data/rates_cache.dart';
 import 'package:moneyconverter/data/rates_repository.dart';
 import 'package:moneyconverter/state/providers.dart';
+import 'package:moneyconverter/ui/flag_icon.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'support.dart';
@@ -62,6 +63,19 @@ void main() {
     await tester.enterText(find.byKey(const Key('amount')), '');
     await tester.pump();
     expect(resultText(tester), '—');
+  });
+
+  testWidgets('draws the European flag for the euro', (tester) async {
+    await pumpApp(tester, [FakeSource('ecb', sampleDays())]);
+
+    // EUR is the "from" currency in these tests.
+    expect(
+      find.descendant(
+        of: find.byKey(const Key('from-currency')),
+        matching: find.byType(EuFlag),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('lets the user pick any currency', (tester) async {
