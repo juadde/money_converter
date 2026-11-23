@@ -1,0 +1,121 @@
+name: Play Store
+
+# Builds a signed Android App Bundle and uploads it to Google Play.
+#
+# - push on main: runs once the repository variable PLAY_STORE_ENABLED is
+#   "true", and uploads to the track in PLAY_TRACK (default: internal);
+# - manual run (Actions tab): pick the track; without the
+#   PLAY_SERVICE_ACCOUNT_JSON secret it only builds the bundle, kept as a
+#   run artifact (for the first upload, which Google requires by hand);
+# - pull request changing this workflow or the build script: dry run with a
+#   throwaway key, nothing is uploaded.
+#
+# Setup: see "Play Store" in the README.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - .github/workflows/play-store.yml
+      - tool/build_android_release.sh
+  workflow_dispatch:
+    inputs:
+      track:
+        description: Google Play track
+        type: choice
+        options: [internal, alpha, beta, production]
+        default: internal
+
+permissions:
+  contents: read
+
+concurrency:
+  group: play-store-${{ github.event_name == 'pull_request' && github.ref || 'release' }}
+  cancel-in-progress: false
+
+env:
+  PACKAGE_NAME: com.juadde.moneyconverter
+  AAB: build/app/outputs/bundle/release/app-release.aab
+
+jobs:
+  play:
+    name: Build and upload to Google Play
+    if: >-
+      github.event_name != 'push' || vars.PLAY_STORE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    env:
+      DRY_RUN: ${{ github.event_name == 'pull_request' }}
+      HAS_PLAY_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON != '' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Generate platform folders
+        run: bash tool/bootstrap_platforms.sh
+
+      - name: Throwaway upload key (dry run)
+        if: env.DRY_RUN == 'true'
+        run: |
+          keytool -genkeypair -keystore "$RUNNER_TEMP/upload.jks" -alias upload \
+            -keyalg RSA -keysize 2048 -validity 1 -dname "CN=dry run" \
+            -storepass dryrunpass -keypass dryrunpass -noprompt
+          {
+            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/upload.jks"
+            echo "ANDROID_KEYSTORE_PASSWORD=dryrunpass"
+            echo "ANDROID_KEY_ALIAS=upload"
+            echo "ANDROID_KEY_PASSWORD=dryrunpass"
+          } >> "$GITHUB_ENV"
+
+      - name: Upload key from secrets
+        if: env.DRY_RUN != 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ]; then
+            echo "::error::Missing secrets ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD or ANDROID_KEY_ALIAS (see README, Play Store)."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload.jks"
+          {
+            echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/upload.jks"
+            echo "ANDROID_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+            echo "ANDROID_KEY_ALIAS=$KEY_ALIAS"
+            echo "ANDROID_KEY_PASSWORD=${KEY_PASSWORD:-$KEYSTORE_PASSWORD}"
+          } >> "$GITHUB_ENV"
+
+      - name: Build the signed bundle
+        env:
+          # Increases with every run of this workflow.
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: bash tool/build_android_release.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moneyconverter-aab-${{ github.run_number }}
+          path: ${{ env.AAB }}
+          retention-days: 30
+
+      - name: Upload to Google Play
+        if: env.DRY_RUN != 'true' && env.HAS_PLAY_ACCOUNT == 'true'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: ${{ env.PACKAGE_NAME }}
+          releaseFiles: ${{ env.AAB }}
+          track: ${{ inputs.track || vars.PLAY_TRACK || 'internal' }}
+          status: ${{ vars.PLAY_RELEASE_STATUS || 'completed' }}
+
+      - name: Note when nothing was uploaded
+        if: env.DRY_RUN != 'true' && env.HAS_PLAY_ACCOUNT != 'true'
+        run: |
+          echo "::notice::No PLAY_SERVICE_ACCOUNT_JSON secret, the bundle is only available as a run artifact."

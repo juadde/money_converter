@@ -71,6 +71,7 @@ dart run flutter_launcher_icons
 ## Intégration et déploiement continus
 
 - **CI** (`.github/workflows/ci.yml`), sur chaque PR et chaque push sur `main` : analyse, tests, build web. Le build de l'APK est désactivé pour l'instant (`if: false`).
+- **Play Store** (`.github/workflows/play-store.yml`) : bundle Android signé, envoyé sur Google Play à chaque push sur `main` une fois activé (voir « Play Store »).
 - **Deploy** (`.github/workflows/deploy.yml`) :
   - à chaque push sur `main` : appli web sur GitHub Pages. La release APK et le build iOS sont désactivés pour l'instant (`if: false`) ;
   - chaque jour ouvré après la publication de la BCE : redéploiement web avec un `rates.json` à jour.
@@ -78,5 +79,46 @@ dart run flutter_launcher_icons
 ### Réglages à faire une fois sur GitHub
 
 - **Pages** : Settings → Pages → Source : « GitHub Actions ». Sur un dépôt privé, Pages demande une offre payante ; sinon il faut rendre le dépôt public.
-- **Android** : l'APK est signé avec une clé de debug régénérée à chaque build, donc il faut désinstaller l'appli avant d'installer une nouvelle version. Une publication sur le Play Store demande un keystore fourni en secret.
+- **Android** : l'APK de la release `latest` (désactivée) est signé avec une clé de debug. Les builds du Play Store sont signés avec la clé d'importation (voir ci-dessous).
 - **iOS** : le build n'est pas signé. Une publication TestFlight ou App Store demande un compte Apple Developer et ses certificats en secrets.
+
+## Play Store
+
+Le workflow `Play Store` construit un Android App Bundle (`.aab`) signé avec la clé d'importation et l'envoie sur Google Play. Le `versionCode` est le numéro de run du workflow, donc il augmente à chaque envoi. L'identifiant de l'appli est `com.juadde.moneyconverter` ; il ne pourra plus changer une fois l'appli créée sur Google Play.
+
+| Déclencheur | Ce qui se passe |
+| --- | --- |
+| Push sur `main` | Rien tant que la variable `PLAY_STORE_ENABLED` ne vaut pas `true` ; ensuite, envoi sur la piste `PLAY_TRACK` (par défaut `internal`) |
+| Lancement manuel (onglet Actions) | Build et envoi sur la piste choisie ; sans compte de service, le bundle est seulement disponible en artefact du run |
+| PR qui modifie le workflow ou le script | Build d'essai avec une clé jetable, rien n'est envoyé |
+
+### Mise en place (une seule fois)
+
+1. **Clé d'importation.** Sur ton ordinateur (Java installé) :
+
+   ```sh
+   keytool -genkeypair -v -keystore upload-keystore.jks -alias upload \
+     -keyalg RSA -keysize 2048 -validity 10000
+   base64 -w0 upload-keystore.jks   # macOS : base64 -i upload-keystore.jks
+   ```
+
+   Garde le fichier `.jks` et ses mots de passe en lieu sûr, hors du dépôt. Évite les antislashs dans les mots de passe.
+
+2. **Secrets GitHub** (Settings → Secrets and variables → Actions → Secrets) :
+   `ANDROID_KEYSTORE_BASE64` (sortie de `base64`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` (`upload`), `ANDROID_KEY_PASSWORD` (facultatif s'il est identique au mot de passe du keystore).
+
+3. **Appli dans la Play Console** : créer l'appli, remplir la fiche et les questionnaires (contenu, confidentialité…), puis activer la signature des applis par Google Play.
+
+4. **Premier envoi à la main** (exigé par Google) : lancer le workflow `Play Store` depuis l'onglet Actions, télécharger l'artefact `moneyconverter-aab-…`, puis l'importer dans la Play Console sur la piste « Tests internes ».
+
+5. **Compte de service** pour les envois automatiques : dans Google Cloud, créer un compte de service et une clé JSON, activer l'API Google Play Android Developer, puis inviter l'adresse du compte de service dans la Play Console (Utilisateurs et autorisations) avec le droit de publier sur les pistes de test. Ajouter le contenu du JSON dans le secret `PLAY_SERVICE_ACCOUNT_JSON`.
+
+6. **Activer les envois automatiques** (Settings → Secrets and variables → Actions → Variables) :
+   - `PLAY_STORE_ENABLED` = `true`
+   - `PLAY_TRACK` (facultatif) : `internal`, `alpha` (test fermé), `beta` (test ouvert) ou `production`
+   - `PLAY_RELEASE_STATUS` (facultatif) : `completed` par défaut ; mettre `draft` tant que l'appli n'a jamais été publiée, sinon Google refuse l'envoi.
+
+### Bon à savoir
+
+- Sur un compte développeur personnel créé après le 13 novembre 2023, Google exige un test fermé avec au moins 12 testeurs inscrits pendant 14 jours d'affilée avant d'ouvrir la production. Les tests internes ne comptent pas : utilise la piste `alpha` pour ce test fermé.
+- Les builds Android de `ci.yml` et `deploy.yml` restent désactivés ; ce workflow est indépendant.
