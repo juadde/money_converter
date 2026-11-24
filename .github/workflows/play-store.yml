@@ -54,8 +54,8 @@ jobs:
       DRY_RUN: ${{ github.event_name == 'pull_request' }}
       HAS_PLAY_ACCOUNT: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON != '' }}
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
@@ -75,7 +75,7 @@ jobs:
           flutter test --update-goldens screenshots/
           ls fastlane/metadata/android/*/images/phoneScreenshots/
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: store-listing-${{ github.run_number }}
           path: fastlane/metadata/android
@@ -120,7 +120,7 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number }}
         run: bash tool/build_android_release.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: moneyconverter-aab-${{ github.run_number }}
           path: ${{ env.AAB }}
