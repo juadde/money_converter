@@ -193,7 +193,7 @@ Ensuite, chaque push sur `main` crée et envoie une nouvelle soumission (version
 
 ## Licence
 
-Copyright (C) 2026 juadde
+Copyright (C) 2026 Julien Addé
 
 Ce programme est un logiciel libre : vous pouvez le redistribuer et/ou le modifier selon les termes de la licence publique générale GNU (GPL) telle que publiée par la Free Software Foundation, soit la version 3 de la licence, soit (à votre choix) toute version ultérieure (`GPL-3.0-or-later`).
 
