@@ -10,6 +10,7 @@ description: |
   values. Works offline with the last saved rates.
 # Replaced by the workflow with the pubspec version and the run number.
 version: '0.0.0'
+license: GPL-3.0-or-later
 base: core24
 grade: stable
 confinement: strict
