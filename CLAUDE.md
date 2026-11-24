@@ -11,4 +11,6 @@
   - screenshots are regenerated automatically by `screenshots/screenshots_test.dart` on
     every publication: update that test when a screen changes;
   - run `python3 tool/check_store_metadata.py`.
+- The README exists in the 8 languages (`README.md` in English, `README.<lang>.md` for the
+  others), with a language bar at the top: change them all together.
 - Play locales: en-US, fr-FR, de-DE, es-ES, it-IT, pl-PL, ro, lt.

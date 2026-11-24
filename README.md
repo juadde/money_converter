@@ -1,40 +1,42 @@
+**English** | [Français](README.fr.md) | [Deutsch](README.de.md) | [Español](README.es.md) | [Italiano](README.it.md) | [Polski](README.pl.md) | [Română](README.ro.md) | [Lietuvių](README.lt.md)
+
 # Money Converter
 
-Convertisseur de devises basé sur les
-[taux de référence de la Banque centrale européenne](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.fr.html),
-publiés en open data chaque jour ouvré vers 16 h (CET).
+Currency converter based on the
+[euro foreign exchange reference rates of the European Central Bank](https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html),
+published as open data every working day around 16:00 CET.
 
-Application Flutter : Android, iOS, web, Windows et Linux avec une seule base de code.
+Flutter app: Android, iOS, web, Windows and Linux from a single code base.
 
-## Fonctionnalités
+## Features
 
-- Conversion en direct pendant la frappe, entre toutes les devises publiées par la BCE (plus l'euro).
-- Devises à parité fixe avec l'euro, que la BCE ne publie pas : escudo cap-verdien (CVE), francs CFA (XOF, XAF), franc comorien (KMF), franc pacifique (XPF), mark convertible bosnien (BAM) et dobra (STN). Leurs taux viennent de la parité officielle et des taux BCE du jour (`lib/models/euro_pegs.dart`).
-- Inversion de la paire, recherche de devise par code ou par nom.
-- Taux du jour et graphique des valeurs passées (1 semaine, 1 mois, 3 mois) ; toucher le graphique affiche la valeur d'un jour.
-- Fonctionne hors ligne avec les derniers taux enregistrés.
-- Drapeaux en SVG (paquet `country_flags`), visibles sur toutes les plateformes, y compris Windows et Linux.
-- Français, anglais, allemand, espagnol, italien, polonais, roumain et lituanien : langue de l'appareil par défaut (anglais si elle n'est pas traduite), modifiable dans l'appli et mémorisée ; thème clair et sombre.
+- Live conversion while typing, between all the currencies published by the ECB (plus the euro).
+- Currencies pegged to the euro, which the ECB does not publish: Cape Verdean escudo (CVE), CFA francs (XOF, XAF), Comorian franc (KMF), CFP franc (XPF), Bosnia-Herzegovina convertible mark (BAM) and dobra (STN). Their rates come from the official parity and the ECB rates of the day (`lib/models/euro_pegs.dart`).
+- Swap the pair, search a currency by code or by name.
+- Rates of the day and a chart of past values (1 week, 1 month, 3 months); touching the chart shows the value of a day.
+- Works offline with the last saved rates.
+- SVG flags (`country_flags` package), visible on every platform, Windows and Linux included.
+- English, French, German, Spanish, Italian, Polish, Romanian and Lithuanian: device language by default (English when it is not translated), can be changed in the app and is remembered; light and dark theme.
 
-Règles de confidentialité (exigées par les boutiques) : `site/privacy.html`, publiées sur https://juadde.github.io/money_converter/privacy.html.
+Privacy policy (required by the stores): `site/privacy.html`, published at https://juadde.github.io/money_converter/privacy.html.
 
-## D'où viennent les taux
+## Where the rates come from
 
-1. **BCE en direct** : `eurofxref-hist-90d.xml` (90 jours, donc le taux du jour et l'historique en une requête).
-2. **Secours** : `rates.json`, une copie JSON du même fichier, régénérée par le workflow `Deploy` et servie par GitHub Pages à côté de l'appli web.
-3. **Cache local** : la dernière réponse, réutilisée pendant une heure puis en dernier recours si le réseau est indisponible.
+1. **ECB, directly**: `eurofxref-hist-90d.xml` (90 days, so today's rates and the history in one request).
+2. **Fallback**: `rates.json`, a JSON copy of the same file, rebuilt by the `Deploy` workflow and served by GitHub Pages next to the web app.
+3. **Local cache**: the last response, reused for one hour, then as a last resort when the network is down.
 
-Le serveur de la BCE n'envoie pas d'en-tête CORS : un navigateur ne peut pas lire son XML. La version web utilise donc directement `rates.json` (même origine).
+The ECB server sends no CORS header, so a browser cannot read its XML. The web version therefore reads `rates.json` directly (same origin).
 
-L'URL de secours se change à la compilation :
+The fallback URL can be changed at build time:
 
 ```sh
-flutter run --dart-define=RATES_FALLBACK_URL=https://exemple.org/rates.json
+flutter run --dart-define=RATES_FALLBACK_URL=https://example.org/rates.json
 ```
 
-## Développement
+## Development
 
-Les dossiers `android/`, `ios/`, `web/`, `windows/` et `linux/` ne sont pas versionnés : un script les génère avec `flutter create` et y applique les réglages nécessaires (permission Internet, nom de l'appli).
+The `android/`, `ios/`, `web/`, `windows/` and `linux/` folders are not versioned: a script generates them with `flutter create` and applies the settings the app needs (Internet permission, app name, icons).
 
 ```sh
 bash tool/bootstrap_platforms.sh
@@ -43,16 +45,16 @@ flutter test
 flutter run
 ```
 
-Pour la version web en local, il faut un `rates.json` à côté de l'appli, ou une URL de secours :
+To run the web version locally, it needs a `rates.json` next to the app, or a fallback URL:
 
 ```sh
 python3 tool/ecb_to_json.py --output web/rates.json
 flutter run -d chrome
 ```
 
-## Icône
+## Icon
 
-L'icône (billet vert) est dessinée en SVG dans `assets/icon/`. Après modification, régénérer les PNG puis les icônes des plateformes :
+The icon (a green banknote) is drawn in SVG in `assets/icon/`. After a change, render the PNGs again, then the platform icons:
 
 ```sh
 rsvg-convert -w 1024 -h 1024 assets/icon/bill.svg -o assets/icon/icon.png
@@ -60,141 +62,143 @@ rsvg-convert -w 1024 -h 1024 assets/icon/bill_foreground.svg -o assets/icon/icon
 dart run flutter_launcher_icons
 ```
 
-## Organisation du code
+## Code layout
 
-| Dossier | Contenu |
+| Folder | Content |
 | --- | --- |
-| `lib/models` | Taux d'un jour, instantané, historique d'une paire |
-| `lib/data` | Lecture du XML BCE et du JSON, sources HTTP, cache, dépôt avec repli |
-| `lib/state` | Providers Riverpod (taux, paire et montant mémorisés) |
-| `lib/ui` | Écran principal, sélecteur de devise, graphique |
-| `lib/l10n` | Textes français et anglais |
-| `tool` | Génération des plateformes, conversion XML BCE vers JSON |
-| `assets/icon` | Icône de l'appli (sources SVG et PNG 1024 px) |
+| `lib/models` | Rates of a day, snapshot, history of a pair, euro parities |
+| `lib/data` | ECB XML and JSON parsing, HTTP sources, cache, repository with fallback |
+| `lib/state` | Riverpod providers (rates, remembered pair, amount and language) |
+| `lib/ui` | Main screen, currency picker, chart, flags |
+| `lib/l10n` | Texts in the 8 languages |
+| `screenshots` | Store screenshot generator |
+| `fastlane/metadata/android` | Google Play listing in the 8 languages |
+| `site` | Privacy policy page |
+| `tool` | Platform generation, ECB XML to JSON, store graphics and checks |
+| `assets/icon` | App icon (SVG sources and 1024 px PNG) |
 
-## Intégration et déploiement continus
+## Continuous integration and deployment
 
-- **CI** (`.github/workflows/ci.yml`), sur chaque PR et chaque push sur `main` : analyse, tests, build web. Le build de l'APK est désactivé pour l'instant (`if: false`).
-- **Desktop** (`.github/workflows/desktop.yml`) : snap Linux et paquet MSIX Windows à chaque push sur `main`, publiés sur le Snap Store et le Microsoft Store une fois activés (voir « Windows et Linux »).
-- **Play Store** (`.github/workflows/play-store.yml`) : bundle Android signé, envoyé sur Google Play à chaque push sur `main` une fois activé (voir « Play Store »).
-- **Deploy** (`.github/workflows/deploy.yml`) :
-  - à chaque push sur `main` : appli web sur GitHub Pages. La release APK et le build iOS sont désactivés pour l'instant (`if: false`) ;
-  - chaque jour ouvré après la publication de la BCE : redéploiement web avec un `rates.json` à jour.
+- **CI** (`.github/workflows/ci.yml`), on every PR and every push on `main`: analysis, tests, store listing check, web build. The APK build is disabled for now (`if: false`).
+- **Desktop** (`.github/workflows/desktop.yml`): Linux snap and Windows MSIX package on every push on `main`, published to the Snap Store and the Microsoft Store once enabled (see "Windows and Linux").
+- **Play Store** (`.github/workflows/play-store.yml`): signed Android bundle and store listing, sent to Google Play on every push on `main` once enabled (see "Play Store").
+- **Deploy** (`.github/workflows/deploy.yml`):
+  - on every push on `main`: web app and privacy policy on GitHub Pages. The APK release and the iOS build are disabled for now (`if: false`);
+  - every working day after the ECB publication: web redeployment with an up-to-date `rates.json`.
 
-### Réglages à faire une fois sur GitHub
+### One-time GitHub settings
 
-- **Pages** : Settings → Pages → Source : « GitHub Actions ». Sur un dépôt privé, Pages demande une offre payante ; sinon il faut rendre le dépôt public.
-- **Android** : l'APK de la release `latest` (désactivée) est signé avec une clé de debug. Les builds du Play Store sont signés avec la clé d'importation (voir ci-dessous).
-- **iOS** : le build n'est pas signé. Une publication TestFlight ou App Store demande un compte Apple Developer et ses certificats en secrets.
+- **Pages**: Settings → Pages → Source: "GitHub Actions". On a private repository, Pages needs a paid plan; otherwise the repository must be public.
+- **Android**: the APK of the `latest` release (disabled) is signed with a debug key. Play Store builds are signed with the upload key (see below).
+- **iOS**: the build is not signed. A TestFlight or App Store release needs an Apple Developer account and its certificates as secrets.
 
 ## Play Store
 
-Le workflow `Play Store` construit un Android App Bundle (`.aab`) signé avec la clé d'importation et le publie sur Google Play avec [fastlane](https://docs.fastlane.tools/actions/upload_to_play_store/), en même temps que la fiche complète : textes, nouveautés, icône, image de présentation et captures d'écran. Le `versionCode` est le numéro de run du workflow, donc il augmente à chaque envoi. L'identifiant de l'appli est `com.juadde.moneyconverter` ; il ne pourra plus changer une fois l'appli créée sur Google Play.
+The `Play Store` workflow builds an Android App Bundle (`.aab`) signed with the upload key and publishes it to Google Play with [fastlane](https://docs.fastlane.tools/actions/upload_to_play_store/), together with the whole store listing: texts, release notes, icon, feature graphic and screenshots. The `versionCode` is the workflow run number, so it increases with every upload. The app ID is `com.juadde.moneyconverter`; it can no longer change once the app exists on Google Play.
 
-| Déclencheur | Ce qui se passe |
+| Trigger | What happens |
 | --- | --- |
-| Push sur `main` | Rien tant que la variable `PLAY_STORE_ENABLED` ne vaut pas `true` ; ensuite, envoi sur la piste `PLAY_TRACK` (par défaut `internal`) |
-| Lancement manuel (onglet Actions) | Build et envoi sur la piste choisie ; sans compte de service, le bundle est seulement disponible en artefact du run |
-| PR qui modifie le workflow ou le script | Build d'essai avec une clé jetable, rien n'est envoyé |
+| Push on `main` | Nothing until the `PLAY_STORE_ENABLED` variable is `true`; then upload to the `PLAY_TRACK` track (`internal` by default) |
+| Manual run (Actions tab) | Build and upload to the chosen track; without a service account, the bundle is only available as a run artifact |
+| PR changing the workflow, the script or the listing | Dry run with a throwaway key, nothing is uploaded |
 
-### Fiche du Play Store
+### Play Store listing
 
-Toute la fiche est dans le dépôt et publiée avec chaque version, pour les 8 langues (`fastlane/metadata/android/<langue>/`) :
+The whole listing lives in the repository and is published with every release, for the 8 languages (`fastlane/metadata/android/<locale>/`):
 
-| Fichier | Contenu | Limite |
+| File | Content | Limit |
 | --- | --- | --- |
-| `title.txt` | Nom de l'appli | 30 caractères |
-| `short_description.txt` | Description courte | 80 caractères |
-| `full_description.txt` | Description complète | 4 000 caractères |
-| `changelogs/default.txt` | Nouveautés de la version (« What's new ») | 500 caractères |
-| `images/icon.png`, `images/featureGraphic.png` | Icône 512 px et image de présentation 1024 × 500 (`tool/store_graphics.py`) | |
-| `images/phoneScreenshots/` | 4 captures 1080 × 1920, **générées** à chaque publication par `screenshots/screenshots_test.dart` avec les taux BCE du jour | |
+| `title.txt` | App name | 30 characters |
+| `short_description.txt` | Short description | 80 characters |
+| `full_description.txt` | Full description | 4,000 characters |
+| `changelogs/default.txt` | Release notes ("What's new") | 500 characters |
+| `images/icon.png`, `images/featureGraphic.png` | 512 px icon and 1024 × 500 feature graphic (`tool/store_graphics.py`) | |
+| `images/phoneScreenshots/` | 4 screenshots, 1080 × 1920, **generated** on every publication by `screenshots/screenshots_test.dart` with the ECB rates of the day | |
 
-`tool/check_store_metadata.py` vérifie les limites (lancé par la CI). Pour voir les captures en local :
+`tool/check_store_metadata.py` checks the limits (run by the CI). To see the screenshots locally:
 
 ```sh
 python3 tool/ecb_to_json.py --output screenshots/rates.json
 flutter test --update-goldens screenshots/
 ```
 
-### Mise en place (une seule fois)
+### Setup (once)
 
-1. **Clé d'importation.** Sur ton ordinateur (Java installé) :
+1. **Upload key.** On your computer (with Java installed):
 
    ```sh
    keytool -genkeypair -v -keystore upload-keystore.jks -alias upload \
      -keyalg RSA -keysize 2048 -validity 10000
-   base64 -w0 upload-keystore.jks   # macOS : base64 -i upload-keystore.jks
+   base64 -w0 upload-keystore.jks   # macOS: base64 -i upload-keystore.jks
    ```
 
-   Garde le fichier `.jks` et ses mots de passe en lieu sûr, hors du dépôt. Évite les antislashs dans les mots de passe.
+   Keep the `.jks` file and its passwords somewhere safe, outside the repository. Avoid backslashes in the passwords.
 
-2. **Secrets GitHub** (Settings → Secrets and variables → Actions → Secrets) :
-   `ANDROID_KEYSTORE_BASE64` (sortie de `base64`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` (`upload`), `ANDROID_KEY_PASSWORD` (facultatif s'il est identique au mot de passe du keystore).
+2. **GitHub secrets** (Settings → Secrets and variables → Actions → Secrets):
+   `ANDROID_KEYSTORE_BASE64` (output of `base64`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` (`upload`), `ANDROID_KEY_PASSWORD` (optional when it is the same as the keystore password).
 
-3. **Appli dans la Play Console** : créer l'appli, remplir la fiche et les questionnaires (contenu, confidentialité…), puis activer la signature des applis par Google Play.
+3. **App in the Play Console**: create the app, fill in the listing and the questionnaires (content, privacy…), then enable Play App Signing.
 
-4. **Premier envoi à la main** (exigé par Google) : lancer le workflow `Play Store` depuis l'onglet Actions, télécharger l'artefact `moneyconverter-aab-…`, puis l'importer dans la Play Console sur la piste « Tests internes ».
+4. **First upload by hand** (required by Google): run the `Play Store` workflow from the Actions tab, download the `moneyconverter-aab-…` artifact, then upload it in the Play Console to the "Internal testing" track.
 
-5. **Compte de service** pour les envois automatiques : dans Google Cloud, créer un compte de service et une clé JSON, activer l'API Google Play Android Developer, puis inviter l'adresse du compte de service dans la Play Console (Utilisateurs et autorisations) avec le droit de publier sur les pistes de test. Ajouter le contenu du JSON dans le secret `PLAY_SERVICE_ACCOUNT_JSON`.
+5. **Service account** for automatic uploads: in Google Cloud, create a service account and a JSON key, enable the Google Play Android Developer API, then invite the service account address in the Play Console (Users and permissions) with permission to release to testing tracks. Put the JSON content in the `PLAY_SERVICE_ACCOUNT_JSON` secret.
 
-6. **Activer les envois automatiques** (Settings → Secrets and variables → Actions → Variables) :
+6. **Enable automatic uploads** (Settings → Secrets and variables → Actions → Variables):
    - `PLAY_STORE_ENABLED` = `true`
-   - `PLAY_TRACK` (facultatif) : `internal`, `alpha` (test fermé), `beta` (test ouvert) ou `production`
-   - `PLAY_RELEASE_STATUS` (facultatif) : `completed` par défaut ; mettre `draft` tant que l'appli n'a jamais été publiée, sinon Google refuse l'envoi.
+   - `PLAY_TRACK` (optional): `internal`, `alpha` (closed testing), `beta` (open testing) or `production`
+   - `PLAY_RELEASE_STATUS` (optional): `completed` by default; use `draft` as long as the app has never been published, otherwise Google rejects the upload.
 
-### Bon à savoir
+### Good to know
 
-- Sur un compte développeur personnel créé après le 13 novembre 2023, Google exige un test fermé avec au moins 12 testeurs inscrits pendant 14 jours d'affilée avant d'ouvrir la production. Les tests internes ne comptent pas : utilise la piste `alpha` pour ce test fermé.
-- Les builds Android de `ci.yml` et `deploy.yml` restent désactivés ; ce workflow est indépendant.
+- On a personal developer account created after November 13, 2023, Google requires a closed test with at least 12 testers opted in for 14 days in a row before opening production. Internal testing does not count: use the `alpha` track for this closed test.
+- The Android builds of `ci.yml` and `deploy.yml` stay disabled; this workflow is independent.
 
-## Windows et Linux
+## Windows and Linux
 
-Le workflow `Desktop` construit, à chaque push sur `main` (ou à la main depuis l'onglet Actions) :
+The `Desktop` workflow builds, on every push on `main` (or by hand from the Actions tab):
 
-- **Linux** : un snap (`money-converter-ecb`, base `core24`, extension GNOME) ;
-- **Windows** : un paquet MSIX pour le Microsoft Store.
+- **Linux**: a snap (`money-converter-ecb`, `core24` base, GNOME extension);
+- **Windows**: an MSIX package for the Microsoft Store.
 
-Les deux paquets sont toujours disponibles en artefacts du run. La publication suit la même logique que pour le Play Store :
+Both packages are always available as run artifacts. Publishing follows the same logic as the Play Store:
 
-| Déclencheur | Snap Store | Microsoft Store |
+| Trigger | Snap Store | Microsoft Store |
 | --- | --- | --- |
-| Push sur `main` | Si la variable `SNAP_STORE_ENABLED` vaut `true` | Si la variable `MSSTORE_ENABLED` vaut `true` |
-| Lancement manuel (onglet Actions) | Si les identifiants sont configurés | Si les identifiants sont configurés |
-| PR qui touche l'empaquetage | Jamais (build seulement) | Jamais (build seulement) |
+| Push on `main` | When the `SNAP_STORE_ENABLED` variable is `true` | When the `MSSTORE_ENABLED` variable is `true` |
+| Manual run (Actions tab) | When the credentials are set | When the credentials are set |
+| PR touching the packaging | Never (build only) | Never (build only) |
 
-### Snap Store (une seule fois)
+### Snap Store (once)
 
-1. Créer un compte sur [snapcraft.io](https://snapcraft.io) et réserver le nom : `snapcraft register money-converter-ecb`. Si le nom est pris, en choisir un autre et le changer dans `snap/snapcraft.yaml` (champ `name`, nom de l'appli et nom du fichier `.desktop` dans `snap/gui/`).
-2. Générer des identifiants pour la CI :
+1. Create an account on [snapcraft.io](https://snapcraft.io) and register the name: `snapcraft register money-converter-ecb`. If the name is taken, pick another one and change it in `snap/snapcraft.yaml` (`name` field, app name and name of the `.desktop` file in `snap/gui/`).
+2. Generate credentials for the CI:
 
    ```sh
    snapcraft export-login --snaps=money-converter-ecb --acls=package_access,package_push,package_update,package_release -
    ```
 
-3. Mettre la sortie dans le secret `SNAPCRAFT_STORE_CREDENTIALS`.
-4. Activer les publications automatiques : variable `SNAP_STORE_ENABLED` = `true`.
-5. Facultatif : la variable `SNAP_CHANNEL` choisit le canal (`edge` par défaut, puis `beta`, `candidate` ou `stable`).
+3. Put the output in the `SNAPCRAFT_STORE_CREDENTIALS` secret.
+4. Enable automatic publishing: variable `SNAP_STORE_ENABLED` = `true`.
+5. Optional: the `SNAP_CHANNEL` variable picks the channel (`edge` by default, then `beta`, `candidate` or `stable`).
 
-### Microsoft Store (une seule fois)
+### Microsoft Store (once)
 
-1. Avoir un compte développeur dans [Partner Center](https://partner.microsoft.com/dashboard) et y réserver le nom de l'appli.
-2. Dans la page de l'appli, « Identité du produit », recopier dans les **variables** GitHub :
+1. Have a developer account in [Partner Center](https://partner.microsoft.com/dashboard) and reserve the app name there.
+2. On the app page, "Product identity", copy into GitHub **variables**:
    - `MSSTORE_IDENTITY_NAME` (Package/Identity/Name)
-   - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, de la forme `CN=…`)
+   - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, in the form `CN=…`)
    - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
-   - `MSSTORE_PRODUCT_ID` (Store ID, 12 caractères)
-3. Faire la **première soumission à la main** (exigé par Microsoft) : lancer le workflow `Desktop`, télécharger l'artefact `moneyconverter-msix-…` et l'importer dans une soumission Partner Center, avec la fiche, les captures et la classification d'âge.
-4. Associer un annuaire Microsoft Entra ID (Azure AD) au compte Partner Center, y créer une application avec le rôle « Manager », puis mettre dans les **secrets** GitHub : `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
+   - `MSSTORE_PRODUCT_ID` (Store ID, 12 characters)
+3. Make the **first submission by hand** (required by Microsoft): run the `Desktop` workflow, download the `moneyconverter-msix-…` artifact and upload it in a Partner Center submission, with the listing, the screenshots and the age rating.
+4. Associate a Microsoft Entra ID (Azure AD) directory with the Partner Center account, create an application with the "Manager" role there, then put into GitHub **secrets**: `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
+5. Enable automatic publishing: variable `MSSTORE_ENABLED` = `true`.
 
-5. Activer les publications automatiques : variable `MSSTORE_ENABLED` = `true`.
+From then on, every push on `main` creates and sends a new submission (version `2.0.<run number>.0`).
 
-Ensuite, chaque push sur `main` crée et envoie une nouvelle soumission (version `2.0.<numéro de run>.0`).
-
-## Licence
+## License
 
 Copyright (C) 2026 Julien Addé
 
-Ce programme est un logiciel libre : vous pouvez le redistribuer et/ou le modifier selon les termes de la licence publique générale GNU (GPL) telle que publiée par la Free Software Foundation, soit la version 3 de la licence, soit (à votre choix) toute version ultérieure (`GPL-3.0-or-later`).
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version (`GPL-3.0-or-later`).
 
-Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE GARANTIE, sans même la garantie implicite de COMMERCIALISATION ou d'ADÉQUATION À UN USAGE PARTICULIER. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the [LICENSE](LICENSE) file for more details.
