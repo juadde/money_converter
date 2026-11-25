@@ -151,6 +151,7 @@ flutter test --update-goldens screenshots/
 ### Gut zu wissen
 
 - Bei einem privaten Entwicklerkonto, das nach dem 13. November 2023 erstellt wurde, verlangt Google vor der Freigabe der Produktion einen geschlossenen Test mit mindestens 12 Testern, die 14 Tage am Stück angemeldet sind. Interne Tests zählen nicht: Verwenden Sie für diesen geschlossenen Test den Track `alpha`.
+- **„Mit dem falschen Schlüssel signiert“ in der Play Console**: Die Fingerabdrücke in der Zusammenfassung des Laufs („Android bundle signature“) mit Play Console → Testen und veröffentlichen → App-Integrität → Zertifikat des Uploadschlüssels vergleichen. Nur Artefakte `moneyconverter-aab-…` hochladen: `dry-run-do-not-upload-aab-…` stammen aus Pull-Requests und sind mit einem Wegwerfschlüssel signiert. Ist bei Google nicht Ihr Schlüssel hinterlegt, dort das Zurücksetzen des Uploadschlüssels beantragen, mit dem Zertifikat aus `keytool -export -rfc -keystore upload-keystore.jks -alias upload -file upload_certificate.pem`.
 - Die Android-Builds in `ci.yml` und `deploy.yml` bleiben deaktiviert; dieser Workflow ist davon unabhängig.
 
 ## Windows und Linux

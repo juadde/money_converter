@@ -151,6 +151,7 @@ flutter test --update-goldens screenshots/
 ### Warto wiedzieć
 
 - Na osobistym koncie dewelopera utworzonym po 13 listopada 2023 r. Google wymaga przed otwarciem produkcji testu zamkniętego z co najmniej 12 testerami zapisanymi przez 14 dni z rzędu. Testy wewnętrzne się nie liczą: do tego testu zamkniętego użyj ścieżki `alpha`.
+- **„Podpisany niewłaściwym kluczem” w Play Console**: porównać odciski widoczne w podsumowaniu uruchomienia („Android bundle signature”) z Play Console → Testowanie i publikowanie → Integralność aplikacji → Certyfikat klucza przesyłania. Przesyłać tylko artefakty `moneyconverter-aab-…`: `dry-run-do-not-upload-aab-…` pochodzą z pull requestów i są podpisane jednorazowym kluczem. Jeśli klucz zarejestrowany w Google nie jest Twój, poproś tam o zresetowanie klucza przesyłania, używając certyfikatu wyeksportowanego przez `keytool -export -rfc -keystore upload-keystore.jks -alias upload -file upload_certificate.pem`.
 - Buildy Androida w `ci.yml` i `deploy.yml` pozostają wyłączone; ten workflow jest od nich niezależny.
 
 ## Windows i Linux

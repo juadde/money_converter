@@ -122,7 +122,9 @@ jobs:
 
       - uses: actions/upload-artifact@v7
         with:
-          name: moneyconverter-aab-${{ github.run_number }}
+          # A dry-run bundle is signed with a throwaway key: Google Play
+          # rejects it, so its name says so.
+          name: ${{ env.DRY_RUN == 'true' && format('dry-run-do-not-upload-aab-{0}', github.run_number) || format('moneyconverter-aab-{0}', github.run_number) }}
           path: ${{ env.AAB }}
           retention-days: 30
 

@@ -151,6 +151,7 @@ flutter test --update-goldens screenshots/
 ### Bine de știut
 
 - Pentru un cont personal de dezvoltator creat după 13 noiembrie 2023, Google cere, înainte de deschiderea producției, o testare închisă cu cel puțin 12 testeri înscriși timp de 14 zile consecutive. Testarea internă nu contează: folosește canalul `alpha` pentru această testare închisă.
+- **„Semnat cu cheia greșită” în Play Console**: se compară amprentele afișate în rezumatul rulării („Android bundle signature”) cu Play Console → Testare și lansare → Integritatea aplicației → Certificatul cheii de încărcare. Se încarcă doar artefactele `moneyconverter-aab-…`: cele `dry-run-do-not-upload-aab-…` provin din pull requesturi și sunt semnate cu o cheie de unică folosință. Dacă la Google este înregistrată altă cheie decât a ta, cere acolo resetarea cheii de încărcare cu certificatul exportat prin `keytool -export -rfc -keystore upload-keystore.jks -alias upload -file upload_certificate.pem`.
 - Build-urile Android din `ci.yml` și `deploy.yml` rămân dezactivate; acest workflow este independent.
 
 ## Windows și Linux

@@ -34,9 +34,30 @@ flutter build appbundle --release --build-number="$BUILD_NUMBER"
 aab=build/app/outputs/bundle/release/app-release.aab
 expected=$(keytool -list -v -keystore "$keystore" -storepass "$ANDROID_KEYSTORE_PASSWORD" \
   -alias "$ANDROID_KEY_ALIAS" | grep -m1 'SHA256:' | awk '{print $2}')
-actual=$(keytool -printcert -jarfile "$aab" | grep -m1 'SHA256:' | awk '{print $2}')
+cert=$(keytool -printcert -jarfile "$aab")
+actual=$(echo "$cert" | grep -m1 'SHA256:' | awk '{print $2}')
+sha1=$(echo "$cert" | grep -m1 'SHA1:' | awk '{print $2}')
 if [ -z "$expected" ] || [ "$expected" != "$actual" ]; then
   echo "The bundle is not signed with the upload key (expected $expected, got ${actual:-none})." >&2
   exit 1
 fi
-echo "Signed bundle: $aab (versionCode $BUILD_NUMBER, key $expected)"
+echo "Signed bundle: $aab (versionCode $BUILD_NUMBER)"
+echo "Upload key SHA-1:   $sha1"
+echo "Upload key SHA-256: $actual"
+# Shown on the run page, to compare with Play Console > Test and release >
+# App integrity > Upload key certificate.
+if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+  {
+    echo "### Android bundle signature"
+    echo ""
+    echo "| | |"
+    echo "| --- | --- |"
+    echo "| versionCode | $BUILD_NUMBER |"
+    echo "| Upload key SHA-1 | \`$sha1\` |"
+    echo "| Upload key SHA-256 | \`$actual\` |"
+    if [ "${DRY_RUN:-false}" = true ]; then
+      echo ""
+      echo "**Dry run: signed with a throwaway key, do not upload this bundle.**"
+    fi
+  } >> "$GITHUB_STEP_SUMMARY"
+fi
