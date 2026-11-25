@@ -52,7 +52,8 @@ flutter_launcher_icons:
 # (identity name, publisher, publisher display name) is passed by the
 # "Desktop" workflow from the repository variables, see the README.
 msix_config:
-  display_name: Money Converter
+  # Must match the name reserved in Partner Center.
+  display_name: Money Converter (ECB)
   publisher_display_name: juadde
   identity_name: com.juadde.moneyconverter
   # Placeholder: the Store publisher comes from the MSSTORE_PUBLISHER variable.
