@@ -55,6 +55,20 @@ jobs:
         run: |
           python3 tool/ecb_to_json.py --output screenshots/rates.json
           flutter test --update-goldens screenshots/
+      - name: TEMP preview
+        run: |
+          pip install --quiet --break-system-packages pillow 2>/dev/null || pip install --quiet pillow
+          python3 - <<'PY'
+          import base64, glob, io
+          from PIL import Image
+          files = sorted(glob.glob('store/windows/fr-FR/screenshots/*.png')) + sorted(glob.glob('store/windows/lt/screenshots/1_*.png'))
+          ims = [Image.open(f).convert('RGB').resize((640, 360)) for f in files]
+          sheet = Image.new('RGB', (1280, 360 * ((len(ims) + 1) // 2)), 'white')
+          for i, im in enumerate(ims):
+              sheet.paste(im, (640 * (i % 2), 360 * (i // 2)))
+          buf = io.BytesIO(); sheet.save(buf, 'JPEG', quality=80)
+          print('SHEET-BEGIN win'); print(base64.b64encode(buf.getvalue()).decode()); print('SHEET-END')
+          PY
       - uses: actions/upload-artifact@v7
         with:
           name: windows-store-assets-${{ github.run_number }}
