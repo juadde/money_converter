@@ -18,6 +18,10 @@ on:
     paths:
       - .github/workflows/desktop.yml
       - snap/**
+      - screenshots/**
+      - store/**
+      - fastlane/**
+      - tool/msstore_listing.py
       - tool/bootstrap_platforms.sh
       - pubspec.yaml
   workflow_dispatch:
@@ -48,6 +52,20 @@ jobs:
       - name: Generate platform folders
         run: bash tool/bootstrap_platforms.sh
       - run: flutter build linux --release
+
+      - name: Microsoft Store screenshots and logos
+        run: |
+          python3 tool/ecb_to_json.py --output screenshots/rates.json
+          flutter test --update-goldens screenshots/
+      - name: Microsoft Store listing folder (texts, screenshots, logos)
+        run: python3 tool/msstore_listing.py --out build/msstore
+      # Unzipped, it gives the msstore-listing folder to import as is in
+      # Partner Center > Store listings > Import listing.
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-store-listing-${{ github.run_number }}
+          path: build/msstore
+          retention-days: 30
 
       - name: Snap version
         run: |

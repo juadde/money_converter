@@ -190,7 +190,7 @@ Both packages are always available as run artifacts. Publishing follows the same
    - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, in the form `CN=…`)
    - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
    - `MSSTORE_PRODUCT_ID` (Store ID, 12 characters)
-3. Make the **first submission by hand** (required by Microsoft): run the `Desktop` workflow, download the `moneyconverter-msix-…` artifact and upload it in a Partner Center submission, with the listing, the screenshots and the age rating.
+3. Make the **first submission by hand** (required by Microsoft): run the `Desktop` workflow, download the `moneyconverter-msix-…` artifact and upload it in a Partner Center submission, with the listing, the screenshots and the age rating. The `windows-store-listing-…` artifact of the same run holds the whole listing for the 8 languages (texts, desktop screenshots 1920 × 1080, logos): unzip it and import the `msstore-listing` folder in Store listings → Import listing. It is built by `tool/msstore_listing.py` from the Google Play texts and from `store/windows/listing_template.csv` (the layout exported from Partner Center).
 4. Associate a Microsoft Entra ID (Azure AD) directory with the Partner Center account, create an application with the "Manager" role there, then put into GitHub **secrets**: `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
 5. Enable automatic publishing: variable `MSSTORE_ENABLED` = `true`.
 

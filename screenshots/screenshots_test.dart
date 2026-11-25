@@ -6,8 +6,10 @@
 //   python3 tool/ecb_to_json.py --output screenshots/rates.json
 //   flutter test --update-goldens screenshots/
 //
-// Writes 4 phone screenshots (1080 x 1920) per listing language into
-// fastlane/metadata/android/<locale>/images/phoneScreenshots/.
+// Writes, per listing language, 4 phone screenshots (1080 x 1920) into
+// fastlane/metadata/android/<locale>/images/phoneScreenshots/ and 3 desktop
+// screenshots (1920 x 1080) for the Microsoft Store into
+// store/windows/<locale>/screenshots/.
 
 import 'dart:io';
 
@@ -144,7 +146,41 @@ void main() {
         ),
       );
 
+  Future<void> shootWindows(String locale, String name) => expectLater(
+        find.byType(MoneyConverterApp),
+        matchesGoldenFile('../store/windows/$locale/screenshots/$name.png'),
+      );
+
   for (final MapEntry(key: language, value: locale) in playLocales.entries) {
+    testWidgets('windows screenshots $locale', (tester) async {
+      // A 1920 x 1080 desktop window (the Store asks for 1366 x 768 or more).
+      tester.view.physicalSize = const Size(1920, 1080);
+      tester.view.devicePixelRatio = 1.25;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
+      final strings = AppStrings(language);
+      debugDisableShadows = false;
+      try {
+        await pumpApp(tester,
+            language: language, from: 'EUR', to: 'AUD', amount: '100');
+        await tester.tap(find.text(strings.threeMonths));
+        await settle(tester);
+        await shootWindows(locale, '1_converter');
+
+        await pumpApp(tester,
+            language: language, from: 'EUR', to: 'CVE', amount: '250');
+        await shootWindows(locale, '2_fixed_parity');
+
+        tester.platformDispatcher.platformBrightnessTestValue =
+            Brightness.dark;
+        await pumpApp(tester,
+            language: language, from: 'USD', to: 'JPY', amount: '50');
+        await shootWindows(locale, '3_dark');
+      } finally {
+        debugDisableShadows = true;
+      }
+    });
+
     testWidgets('screenshots $locale', (tester) async {
       // A 1080 x 1920 phone.
       tester.view.physicalSize = const Size(1080, 1920);

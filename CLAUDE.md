@@ -10,6 +10,8 @@
     is added, changed or removed;
   - screenshots are regenerated automatically by `screenshots/screenshots_test.dart` on
     every publication: update that test when a screen changes;
+  - the Microsoft Store listing (`tool/msstore_listing.py`) reuses those texts; update its
+    features, captions and search terms when a feature changes;
   - run `python3 tool/check_store_metadata.py`.
 - The README exists in the 8 languages (`README.md` in English, `README.<lang>.md` for the
   others), with a language bar at the top: change them all together.
