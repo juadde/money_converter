@@ -83,13 +83,14 @@ dart run flutter_launcher_icons
 - **Desktop** (`.github/workflows/desktop.yml`): „Linux“ snap ir „Windows“ MSIX paketas kiekvienam `main` pakeitimui, įjungus skelbiami „Snap Store“ ir „Microsoft Store“ (žr. „Windows ir Linux“).
 - **Play Store** (`.github/workflows/play-store.yml`): pasirašytas „Android“ paketas ir parduotuvės aprašas, įjungus siunčiami į „Google Play“ kiekvienam `main` pakeitimui (žr. „Play Store“).
 - **Deploy** (`.github/workflows/deploy.yml`):
-  - kiekvienam `main` pakeitimui: žiniatinklio programa ir privatumo politika „GitHub Pages“. APK leidimas ir „iOS“ kompiliavimas kol kas išjungti (`if: false`);
+  - kiekvienam `main` pakeitimui: žiniatinklio programa ir privatumo politika „GitHub Pages“. „iOS“ kompiliavimas kol kas išjungtas (`if: false`);
   - kiekvieną darbo dieną po ECB paskelbimo: žiniatinklio programa iš naujo įdiegiama su atnaujintu `rates.json`.
+- **Release** (`.github/workflows/release.yml`), kiekvienam `main` pakeitimui: „GitHub“ leidimas `v<versija>-<paleidimas>` su pasirašytu „Android“ APK, „Windows“ zip ir „Linux“ tar.gz bei snap paketais.
 
 ### Vienkartiniai „GitHub“ nustatymai
 
 - **Pages**: Settings → Pages → Source: „GitHub Actions“. Privačiai saugyklai „Pages“ reikalingas mokamas planas; kitu atveju saugykla turi būti vieša.
-- **Android**: `latest` leidimo (išjungto) APK pasirašytas derinimo raktu. „Play Store“ paketai pasirašomi įkėlimo raktu (žr. toliau).
+- **Android**: „GitHub“ leidimų APK pasirašytas įkėlimo raktu, todėl juo negalima atnaujinti iš „Google Play“ įdiegtos versijos (pirmiausia ją pašalinkite). „Play Store“ paketai pasirašomi įkėlimo raktu (žr. toliau).
 - **iOS**: paketas nepasirašytas. Norint skelbti „TestFlight“ ar „App Store“, reikia „Apple Developer“ paskyros ir jos sertifikatų kaip slaptųjų reikšmių.
 
 ## Play Store

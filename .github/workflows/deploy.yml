@@ -1,7 +1,7 @@
 name: Deploy
 
-# - every push on main: web app to GitHub Pages (Android APK release and
-#   iOS build check are disabled for now);
+# - every push on main: web app to GitHub Pages (iOS build check disabled
+#   for now; Android, Windows and Linux builds go to the Release workflow);
 # - every working day after the ECB publication (around 16:00 CET): the web
 #   app is redeployed with a fresh rates.json, the fallback data source.
 on:
@@ -54,39 +54,6 @@ jobs:
     steps:
       - id: deploy
         uses: actions/deploy-pages@v5
-
-  android:
-    name: Android APK to the "latest" release
-    # Disabled for now: only the web app is deployed. To re-enable, use:
-    #   if: github.event_name != 'schedule'
-    if: false
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '17'
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - name: Generate platform folders
-        run: bash tool/bootstrap_platforms.sh
-      - run: flutter build apk --release
-      - name: Publish the APK
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          cp build/app/outputs/flutter-apk/app-release.apk moneyconverter.apk
-          gh release delete latest --yes --cleanup-tag || true
-          gh release create latest moneyconverter.apk \
-            --title "Dernier build Android" \
-            --notes "Build automatique du commit ${GITHUB_SHA}." \
-            --prerelease \
-            --target "${GITHUB_SHA}"
 
   ios:
     name: iOS build (no code signing)

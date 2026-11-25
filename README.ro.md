@@ -83,13 +83,14 @@ dart run flutter_launcher_icons
 - **Desktop** (`.github/workflows/desktop.yml`): snap Linux și pachet MSIX Windows la fiecare push pe `main`, publicate în Snap Store și Microsoft Store după activare (vezi „Windows și Linux”).
 - **Play Store** (`.github/workflows/play-store.yml`): bundle Android semnat și fișa din magazin, trimise la Google Play la fiecare push pe `main` după activare (vezi „Play Store”).
 - **Deploy** (`.github/workflows/deploy.yml`):
-  - la fiecare push pe `main`: aplicația web și politica de confidențialitate pe GitHub Pages. Release-ul APK și build-ul iOS sunt dezactivate deocamdată (`if: false`);
+  - la fiecare push pe `main`: aplicația web și politica de confidențialitate pe GitHub Pages. Build-ul iOS este dezactivat deocamdată (`if: false`);
   - în fiecare zi lucrătoare după publicarea BCE: o nouă livrare web cu un `rates.json` actualizat.
+- **Release** (`.github/workflows/release.yml`), la fiecare push pe `main`: un release GitHub `v<versiune>-<rulare>` cu APK-ul Android semnat, o arhivă zip pentru Windows și tar.gz-ul și snap-ul pentru Linux.
 
 ### Setări unice pe GitHub
 
 - **Pages**: Settings → Pages → Source: „GitHub Actions”. Pentru un depozit privat, Pages cere un abonament plătit; altfel depozitul trebuie să fie public.
-- **Android**: APK-ul din release-ul `latest` (dezactivat) este semnat cu o cheie de depanare. Build-urile pentru Play Store sunt semnate cu cheia de încărcare (vezi mai jos).
+- **Android**: APK-ul din release-urile GitHub este semnat cu cheia de încărcare, deci nu poate actualiza o versiune instalată din Google Play (dezinstaleaz-o mai întâi). Build-urile pentru Play Store sunt semnate cu cheia de încărcare (vezi mai jos).
 - **iOS**: build-ul nu este semnat. O publicare în TestFlight sau App Store cere un cont Apple Developer și certificatele lui ca secrete.
 
 ## Play Store

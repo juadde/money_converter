@@ -83,13 +83,14 @@ dart run flutter_launcher_icons
 - **Desktop** (`.github/workflows/desktop.yml`) : snap Linux et paquet MSIX Windows à chaque push sur `main`, publiés sur le Snap Store et le Microsoft Store une fois activés (voir « Windows et Linux »).
 - **Play Store** (`.github/workflows/play-store.yml`) : bundle Android signé et fiche, envoyés sur Google Play à chaque push sur `main` une fois activé (voir « Play Store »).
 - **Deploy** (`.github/workflows/deploy.yml`) :
-  - à chaque push sur `main` : appli web et règles de confidentialité sur GitHub Pages. La release APK et le build iOS sont désactivés pour l'instant (`if: false`) ;
+  - à chaque push sur `main` : appli web et règles de confidentialité sur GitHub Pages. Le build iOS est désactivé pour l'instant (`if: false`) ;
   - chaque jour ouvré après la publication de la BCE : redéploiement web avec un `rates.json` à jour.
+- **Release** (`.github/workflows/release.yml`), à chaque push sur `main` : une release GitHub `v<version>-<run>` avec l'APK Android signé, un zip Windows, et le tar.gz et le snap Linux.
 
 ### Réglages à faire une fois sur GitHub
 
 - **Pages** : Settings → Pages → Source : « GitHub Actions ». Sur un dépôt privé, Pages demande une offre payante ; sinon il faut rendre le dépôt public.
-- **Android** : l'APK de la release `latest` (désactivée) est signé avec une clé de debug. Les builds du Play Store sont signés avec la clé d'importation (voir ci-dessous).
+- **Android** : l'APK des releases GitHub est signé avec la clé d'importation ; il ne peut donc pas mettre à jour une version installée depuis Google Play (la désinstaller d'abord). Les builds du Play Store sont signés avec la clé d'importation (voir ci-dessous).
 - **iOS** : le build n'est pas signé. Une publication TestFlight ou App Store demande un compte Apple Developer et ses certificats en secrets.
 
 ## Play Store

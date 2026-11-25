@@ -8,6 +8,7 @@
 #   ANDROID_KEY_ALIAS          key alias in the keystore
 #   ANDROID_KEY_PASSWORD       key password
 #   BUILD_NUMBER               Android versionCode, must increase on each upload
+#   ANDROID_ARTIFACT           appbundle (default, for Google Play) or apk
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -29,9 +30,14 @@ android.injected.signing.key.alias=$ANDROID_KEY_ALIAS
 android.injected.signing.key.password=$ANDROID_KEY_PASSWORD
 PROPS
 
-flutter build appbundle --release --build-number="$BUILD_NUMBER"
+artifact="${ANDROID_ARTIFACT:-appbundle}"
+flutter build "$artifact" --release --build-number="$BUILD_NUMBER"
 
-aab=build/app/outputs/bundle/release/app-release.aab
+if [ "$artifact" = apk ]; then
+  aab=build/app/outputs/flutter-apk/app-release.apk
+else
+  aab=build/app/outputs/bundle/release/app-release.aab
+fi
 # The repository is public, and so are the run logs: the fingerprints are
 # compared here but never printed. Check them on your own computer with
 #   keytool -list -v -keystore upload-keystore.jks -alias upload

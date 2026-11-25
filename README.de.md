@@ -83,13 +83,14 @@ dart run flutter_launcher_icons
 - **Desktop** (`.github/workflows/desktop.yml`): Linux-Snap und Windows-MSIX-Paket bei jedem Push auf `main`, nach Aktivierung im Snap Store und im Microsoft Store veröffentlicht (siehe „Windows und Linux“).
 - **Play Store** (`.github/workflows/play-store.yml`): signiertes Android-Bundle und Store-Eintrag, nach Aktivierung bei jedem Push auf `main` an Google Play gesendet (siehe „Play Store“).
 - **Deploy** (`.github/workflows/deploy.yml`):
-  - bei jedem Push auf `main`: Web-App und Datenschutzerklärung auf GitHub Pages. Das APK-Release und der iOS-Build sind vorerst deaktiviert (`if: false`);
+  - bei jedem Push auf `main`: Web-App und Datenschutzerklärung auf GitHub Pages. Der iOS-Build ist vorerst deaktiviert (`if: false`);
   - an jedem Arbeitstag nach der EZB-Veröffentlichung: erneute Web-Bereitstellung mit aktueller `rates.json`.
+- **Release** (`.github/workflows/release.yml`), bei jedem Push auf `main`: ein GitHub-Release `v<Version>-<Lauf>` mit dem signierten Android-APK, einem Windows-Zip sowie dem Linux-tar.gz und -Snap.
 
 ### Einmalige Einstellungen auf GitHub
 
 - **Pages**: Settings → Pages → Source: „GitHub Actions“. Bei einem privaten Repository erfordert Pages ein kostenpflichtiges Abo; sonst muss das Repository öffentlich sein.
-- **Android**: Das APK des Release `latest` (deaktiviert) ist mit einem Debug-Schlüssel signiert. Die Play-Store-Builds werden mit dem Upload-Schlüssel signiert (siehe unten).
+- **Android**: Das APK der GitHub-Releases ist mit dem Upload-Schlüssel signiert und kann daher keine aus Google Play installierte Version aktualisieren (diese zuerst deinstallieren). Die Play-Store-Builds werden mit dem Upload-Schlüssel signiert (siehe unten).
 - **iOS**: Der Build ist nicht signiert. Eine Veröffentlichung über TestFlight oder den App Store erfordert ein Apple-Developer-Konto und dessen Zertifikate als Secrets.
 
 ## Play Store
