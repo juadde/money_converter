@@ -151,6 +151,7 @@ flutter test --update-goldens screenshots/
 ### Verta žinoti
 
 - Asmeninėje kūrėjo paskyroje, sukurtoje po 2023 m. lapkričio 13 d., „Google“ prieš atveriant gamybinę versiją reikalauja uždaro testavimo su bent 12 testuotojų, užsiregistravusių 14 dienų iš eilės. Vidinis testavimas neįskaitomas: šiam uždaram testavimui naudokite kanalą `alpha`.
+- **„Pasirašyta netinkamu raktu“ „Play Console“**: palyginti savo raktų saugyklos kontrolinius kodus, kuriuos jūsų kompiuteryje parodo `keytool -list -v -keystore upload-keystore.jks -alias upload` (paleidimų žurnalai vieši ir jų niekada nerodo), su „Play Console“ → Testavimas ir leidimas → Programos vientisumas → Įkėlimo rakto sertifikatas. Įkelti tik `moneyconverter-aab-…` artefaktus: `dry-run-do-not-upload-aab-…` gaunami iš pull request ir pasirašyti vienkartiniu raktu. Jei „Google“ užregistruotas ne jūsų raktas, ten paprašykite iš naujo nustatyti įkėlimo raktą, naudodami sertifikatą, eksportuotą komanda `keytool -export -rfc -keystore upload-keystore.jks -alias upload -file upload_certificate.pem`.
 - „Android“ kompiliavimas `ci.yml` ir `deploy.yml` lieka išjungtas; ši darbo eiga nuo jų nepriklauso.
 
 ## Windows ir Linux

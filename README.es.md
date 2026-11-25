@@ -151,6 +151,7 @@ flutter test --update-goldens screenshots/
 ### Conviene saber
 
 - En una cuenta de desarrollador personal creada después del 13 de noviembre de 2023, Google exige una prueba cerrada con al menos 12 testers inscritos durante 14 días seguidos antes de abrir la producción. Las pruebas internas no cuentan: usa el canal `alpha` para esta prueba cerrada.
+- **«Firmado con una clave incorrecta» en Play Console**: comparar las huellas de tu keystore, que muestra en tu ordenador `keytool -list -v -keystore upload-keystore.jks -alias upload` (los registros de las ejecuciones son públicos y nunca las muestran), con Play Console → Probar y publicar → Integridad de la aplicación → Certificado de la clave de subida. Subir solo los artefactos `moneyconverter-aab-…`: los `dry-run-do-not-upload-aab-…` vienen de pull requests y están firmados con una clave desechable. Si la clave registrada en Google no es la tuya, solicita allí el restablecimiento de la clave de subida con el certificado exportado por `keytool -export -rfc -keystore upload-keystore.jks -alias upload -file upload_certificate.pem`.
 - Los builds de Android de `ci.yml` y `deploy.yml` siguen desactivados; este workflow es independiente.
 
 ## Windows y Linux

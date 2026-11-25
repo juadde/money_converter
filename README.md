@@ -151,6 +151,7 @@ flutter test --update-goldens screenshots/
 ### Good to know
 
 - On a personal developer account created after November 13, 2023, Google requires a closed test with at least 12 testers opted in for 14 days in a row before opening production. Internal testing does not count: use the `alpha` track for this closed test.
+- **"Signed with the wrong key" in the Play Console**: compare the fingerprints of your keystore, printed on your computer by `keytool -list -v -keystore upload-keystore.jks -alias upload` (the run logs are public, so they never show them), with Play Console → Test and release → App integrity → Upload key certificate. Only upload `moneyconverter-aab-…` artifacts: `dry-run-do-not-upload-aab-…` ones come from pull requests and are signed with a throwaway key. If the key registered with Google is not yours, request an upload key reset there with the certificate exported by `keytool -export -rfc -keystore upload-keystore.jks -alias upload -file upload_certificate.pem`.
 - The Android builds of `ci.yml` and `deploy.yml` stay disabled; this workflow is independent.
 
 ## Windows and Linux

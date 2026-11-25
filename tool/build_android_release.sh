@@ -32,11 +32,25 @@ PROPS
 flutter build appbundle --release --build-number="$BUILD_NUMBER"
 
 aab=build/app/outputs/bundle/release/app-release.aab
+# The repository is public, and so are the run logs: the fingerprints are
+# compared here but never printed. Check them on your own computer with
+#   keytool -list -v -keystore upload-keystore.jks -alias upload
 expected=$(keytool -list -v -keystore "$keystore" -storepass "$ANDROID_KEYSTORE_PASSWORD" \
   -alias "$ANDROID_KEY_ALIAS" | grep -m1 'SHA256:' | awk '{print $2}')
 actual=$(keytool -printcert -jarfile "$aab" | grep -m1 'SHA256:' | awk '{print $2}')
 if [ -z "$expected" ] || [ "$expected" != "$actual" ]; then
-  echo "The bundle is not signed with the upload key (expected $expected, got ${actual:-none})." >&2
+  echo "The bundle is not signed with the upload key." >&2
   exit 1
 fi
-echo "Signed bundle: $aab (versionCode $BUILD_NUMBER, key $expected)"
+echo "Signed bundle: $aab (versionCode $BUILD_NUMBER), signature checked against the upload key"
+if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+  {
+    echo "### Android bundle"
+    echo ""
+    echo "versionCode $BUILD_NUMBER, signed with the upload key (fingerprints not shown: public logs)."
+    if [ "${DRY_RUN:-false}" = true ]; then
+      echo ""
+      echo "**Dry run: signed with a throwaway key, do not upload this bundle.**"
+    fi
+  } >> "$GITHUB_STEP_SUMMARY"
+fi

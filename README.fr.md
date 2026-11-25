@@ -151,6 +151,7 @@ flutter test --update-goldens screenshots/
 ### Bon à savoir
 
 - Sur un compte développeur personnel créé après le 13 novembre 2023, Google exige un test fermé avec au moins 12 testeurs inscrits pendant 14 jours d'affilée avant d'ouvrir la production. Les tests internes ne comptent pas : utilisez la piste `alpha` pour ce test fermé.
+- **« Signé avec la mauvaise clé » dans la Play Console** : comparer les empreintes de votre keystore, affichées sur votre ordinateur par `keytool -list -v -keystore upload-keystore.jks -alias upload` (les journaux des runs sont publics et ne les montrent jamais), avec Play Console → Tester et publier → Intégrité de l'appli → Certificat de clé d'importation. N'importer que les artefacts `moneyconverter-aab-…` : les `dry-run-do-not-upload-aab-…` viennent des pull requests et sont signés avec une clé jetable. Si la clé enregistrée chez Google n'est pas la vôtre, y demander une réinitialisation de la clé d'importation avec le certificat exporté par `keytool -export -rfc -keystore upload-keystore.jks -alias upload -file upload_certificate.pem`.
 - Les builds Android de `ci.yml` et `deploy.yml` restent désactivés ; ce workflow est indépendant.
 
 ## Windows et Linux
