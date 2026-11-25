@@ -58,6 +58,25 @@ def feature_graphic(lines, bold, medium, out):
     image.save(out)
 
 
+def poster(bold, out, root):
+    """2:3 poster art: the banknote icon over the app name."""
+    width, height = 1440, 2160
+    image = Image.new("RGB", (width, height), GREEN)
+    icon_png = out.with_suffix(".icon.png")
+    subprocess.run(["rsvg-convert", "-w", "1100", "-h", "1100",
+                    str(root / "assets/icon/bill.svg"),
+                    "-o", str(icon_png)], check=True)
+    mask = Image.new("L", (1100, 1100), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, 1099, 1099), radius=220, fill=255)
+    image.paste(Image.open(icon_png).convert("RGB"), ((width - 1100) // 2, 420), mask)
+    icon_png.unlink()
+    draw = ImageDraw.Draw(image)
+    big = bold.font_variant(size=150)
+    for i, line in enumerate(["Money Converter", "(ECB)"]):
+        draw.text((width / 2, 1720 + i * 180), line, font=big, fill="white", anchor="mm")
+    image.save(out)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--font-dir", default="/usr/share/fonts/opentype/inter")
@@ -76,7 +95,15 @@ def main():
         feature_graphic(lines, bold, medium, images / "featureGraphic.png")
         (images / "icon.png").write_bytes(icon.read_bytes())
     icon.unlink()
-    print(f"Graphics written for {len(SUBTITLES)} languages")
+
+    # Microsoft Store logos: 1:1 box art (required) and 2:3 poster art.
+    windows = root / "store/windows"
+    windows.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["rsvg-convert", "-w", "2160", "-h", "2160",
+                    str(root / "assets/icon/bill.svg"),
+                    "-o", str(windows / "box_art_2160.png")], check=True)
+    poster(bold, windows / "poster_art_1440x2160.png", root)
+    print(f"Graphics written for {len(SUBTITLES)} languages and the Microsoft Store")
 
 
 if __name__ == "__main__":

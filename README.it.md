@@ -190,7 +190,7 @@ Entrambi i pacchetti sono sempre disponibili come artefatti dell'esecuzione. La 
    - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, nella forma `CN=…`)
    - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
    - `MSSTORE_PRODUCT_ID` (Store ID, 12 caratteri)
-3. Fare il **primo invio a mano** (richiesto da Microsoft): avviare il workflow `Desktop`, scaricare l'artefatto `moneyconverter-msix-…` e caricarlo in un invio di Partner Center, con la scheda, gli screenshot e la classificazione per età.
+3. Fare il **primo invio a mano** (richiesto da Microsoft): avviare il workflow `Desktop`, scaricare l'artefatto `moneyconverter-msix-…` e caricarlo in un invio di Partner Center, con la scheda, gli screenshot e la classificazione per età. L'artefatto `windows-store-assets-…` della stessa esecuzione contiene gli screenshot desktop (1920 × 1080, per lingua) e i loghi (box art 1:1, poster 2:3).
 4. Associare una directory Microsoft Entra ID (Azure AD) all'account Partner Center, crearvi un'applicazione con il ruolo «Manager» e poi inserire nei **secret** di GitHub: `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
 5. Attivare la pubblicazione automatica: variabile `MSSTORE_ENABLED` = `true`.
 

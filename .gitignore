@@ -37,3 +37,4 @@ coverage/
 /screenshots/rates.json
 /fastlane/metadata/android/*/images/phoneScreenshots/
 /screenshots/failures/
+/store/windows/*/screenshots/
