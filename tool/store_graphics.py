@@ -102,6 +102,10 @@ def main():
     subprocess.run(["rsvg-convert", "-w", "2160", "-h", "2160",
                     str(root / "assets/icon/bill.svg"),
                     "-o", str(windows / "box_art_2160.png")], check=True)
+    for size in (1080, 300):
+        subprocess.run(["rsvg-convert", "-w", str(size), "-h", str(size),
+                        str(root / "assets/icon/bill.svg"),
+                        "-o", str(windows / f"logo_{size}.png")], check=True)
     poster(bold, windows / "poster_art_1440x2160.png", root)
     print(f"Graphics written for {len(SUBTITLES)} languages and the Microsoft Store")
 

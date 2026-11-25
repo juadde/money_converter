@@ -190,7 +190,7 @@ Abu paketai visada pasiekiami kaip paleidimo artefaktai. Skelbimas vyksta pagal 
    - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, formatu `CN=…`)
    - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
    - `MSSTORE_PRODUCT_ID` (Store ID, 12 simbolių)
-3. **Pirmąjį pateikimą atlikti rankiniu būdu** (reikalauja „Microsoft“): paleisti darbo eigą `Desktop`, atsisiųsti artefaktą `moneyconverter-msix-…` ir įkelti jį į „Partner Center“ pateikimą kartu su aprašu, ekrano kopijomis ir amžiaus klasifikacija. To paties paleidimo artefakte `windows-store-assets-…` yra kompiuterio ekrano kopijos (1920 × 1080, kiekvienai kalbai) ir logotipai (1:1 box art, 2:3 plakatas).
+3. **Pirmąjį pateikimą atlikti rankiniu būdu** (reikalauja „Microsoft“): paleisti darbo eigą `Desktop`, atsisiųsti artefaktą `moneyconverter-msix-…` ir įkelti jį į „Partner Center“ pateikimą kartu su aprašu, ekrano kopijomis ir amžiaus klasifikacija. To paties paleidimo artefakte `windows-store-listing-…` yra visas aprašas 8 kalbomis (tekstai, kompiuterio ekrano kopijos 1920 × 1080, logotipai): išarchyvuokite jį ir importuokite aplanką `msstore-listing` skiltyje „Store“ aprašai → Importuoti aprašą. Jį sukuria `tool/msstore_listing.py` iš „Google Play“ tekstų ir `store/windows/listing_template.csv` (iš „Partner Center“ eksportuoto šablono).
 4. Susieti „Microsoft Entra ID“ („Azure AD“) katalogą su „Partner Center“ paskyra, jame sukurti programą su vaidmeniu „Manager“, tada įrašyti į „GitHub“ **slaptąsias reikšmes**: `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
 5. Įjungti automatinį skelbimą: kintamasis `MSSTORE_ENABLED` = `true`.
 

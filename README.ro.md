@@ -190,7 +190,7 @@ Ambele pachete sunt mereu disponibile ca artefacte ale rulării. Publicarea urme
    - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, de forma `CN=…`)
    - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
    - `MSSTORE_PRODUCT_ID` (Store ID, 12 caractere)
-3. Se face **prima trimitere manual** (cerută de Microsoft): se rulează workflow-ul `Desktop`, se descarcă artefactul `moneyconverter-msix-…` și se încarcă într-o trimitere din Partner Center, împreună cu fișa, capturile de ecran și clasificarea pe vârste. Artefactul `windows-store-assets-…` al aceleiași rulări conține capturile pentru desktop (1920 × 1080, pe limbă) și siglele (box art 1:1, poster 2:3).
+3. Se face **prima trimitere manual** (cerută de Microsoft): se rulează workflow-ul `Desktop`, se descarcă artefactul `moneyconverter-msix-…` și se încarcă într-o trimitere din Partner Center, împreună cu fișa, capturile de ecran și clasificarea pe vârste. Artefactul `windows-store-listing-…` al aceleiași rulări conține întreaga fișă pentru cele 8 limbi (texte, capturi desktop 1920 × 1080, sigle): se dezarhivează și se importă folderul `msstore-listing` în Fișe Store → Importă fișa. Este generat de `tool/msstore_listing.py` din textele Google Play și din `store/windows/listing_template.csv` (șablonul exportat din Partner Center).
 4. Se asociază un director Microsoft Entra ID (Azure AD) cu contul Partner Center, se creează în el o aplicație cu rolul „Manager”, apoi se pun în **secretele** GitHub: `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
 5. Se activează publicarea automată: variabila `MSSTORE_ENABLED` = `true`.
 

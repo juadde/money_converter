@@ -190,7 +190,7 @@ Oba pakiety są zawsze dostępne jako artefakty uruchomienia. Publikacja działa
    - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, w postaci `CN=…`)
    - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
    - `MSSTORE_PRODUCT_ID` (Store ID, 12 znaków)
-3. Wykonać **pierwsze zgłoszenie ręcznie** (wymagane przez Microsoft): uruchomić workflow `Desktop`, pobrać artefakt `moneyconverter-msix-…` i przesłać go w zgłoszeniu w Partner Center, razem ze stroną, zrzutami ekranu i klasyfikacją wiekową. Artefakt `windows-store-assets-…` z tego samego uruchomienia zawiera zrzuty ekranu dla komputerów (1920 × 1080, dla każdego języka) i logotypy (box art 1:1, plakat 2:3).
+3. Wykonać **pierwsze zgłoszenie ręcznie** (wymagane przez Microsoft): uruchomić workflow `Desktop`, pobrać artefakt `moneyconverter-msix-…` i przesłać go w zgłoszeniu w Partner Center, razem ze stroną, zrzutami ekranu i klasyfikacją wiekową. Artefakt `windows-store-listing-…` z tego samego uruchomienia zawiera całą stronę dla 8 języków (teksty, zrzuty ekranu 1920 × 1080, logotypy): rozpakować go i zaimportować folder `msstore-listing` w Strony w sklepie → Importuj stronę. Tworzy go `tool/msstore_listing.py` z tekstów Google Play i z `store/windows/listing_template.csv` (szablonu wyeksportowanego z Partner Center).
 4. Powiązać katalog Microsoft Entra ID (Azure AD) z kontem Partner Center, utworzyć w nim aplikację z rolą „Manager”, a następnie zapisać w **sekretach** GitHuba: `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
 5. Włączyć automatyczną publikację: zmienna `MSSTORE_ENABLED` = `true`.
 

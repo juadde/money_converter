@@ -190,7 +190,7 @@ Beide Pakete stehen immer als Artefakte des Laufs bereit. Die Veröffentlichung 
    - `MSSTORE_PUBLISHER` (Package/Identity/Publisher, in der Form `CN=…`)
    - `MSSTORE_PUBLISHER_DISPLAY_NAME` (Package/Properties/PublisherDisplayName)
    - `MSSTORE_PRODUCT_ID` (Store-ID, 12 Zeichen)
-3. Die **erste Einreichung von Hand** vornehmen (von Microsoft verlangt): den Workflow `Desktop` starten, das Artefakt `moneyconverter-msix-…` herunterladen und in einer Partner-Center-Einreichung hochladen, mit Eintrag, Screenshots und Altersfreigabe. Das Artefakt `windows-store-assets-…` desselben Laufs enthält die Desktop-Screenshots (1920 × 1080, je Sprache) und die Logos (Box-Art 1:1, Poster-Art 2:3).
+3. Die **erste Einreichung von Hand** vornehmen (von Microsoft verlangt): den Workflow `Desktop` starten, das Artefakt `moneyconverter-msix-…` herunterladen und in einer Partner-Center-Einreichung hochladen, mit Eintrag, Screenshots und Altersfreigabe. Das Artefakt `windows-store-listing-…` desselben Laufs enthält den gesamten Eintrag für die 8 Sprachen (Texte, Desktop-Screenshots 1920 × 1080, Logos): entpacken und den Ordner `msstore-listing` unter Store-Einträge → Eintrag importieren einlesen. Es wird von `tool/msstore_listing.py` aus den Google-Play-Texten und `store/windows/listing_template.csv` (der aus dem Partner Center exportierten Vorlage) erzeugt.
 4. Ein Microsoft-Entra-ID-Verzeichnis (Azure AD) mit dem Partner-Center-Konto verknüpfen, dort eine Anwendung mit der Rolle „Manager“ erstellen und dann in GitHub-**Secrets** speichern: `PARTNER_CENTER_TENANT_ID`, `PARTNER_CENTER_SELLER_ID`, `PARTNER_CENTER_CLIENT_ID`, `PARTNER_CENTER_CLIENT_SECRET`.
 5. Automatische Veröffentlichung aktivieren: Variable `MSSTORE_ENABLED` = `true`.
 
