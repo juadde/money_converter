@@ -83,13 +83,14 @@ dart run flutter_launcher_icons
 - **Desktop** (`.github/workflows/desktop.yml`): snap Linux e pacchetto MSIX Windows a ogni push su `main`, pubblicati su Snap Store e Microsoft Store una volta attivati (vedi «Windows e Linux»).
 - **Play Store** (`.github/workflows/play-store.yml`): bundle Android firmato e scheda dello store, inviati a Google Play a ogni push su `main` una volta attivato (vedi «Play Store»).
 - **Deploy** (`.github/workflows/deploy.yml`):
-  - a ogni push su `main`: app web e informativa sulla privacy su GitHub Pages. La release dell'APK e la build iOS sono disattivate per ora (`if: false`);
+  - a ogni push su `main`: app web e informativa sulla privacy su GitHub Pages. La build iOS è disattivata per ora (`if: false`);
   - ogni giorno lavorativo dopo la pubblicazione della BCE: nuova distribuzione web con un `rates.json` aggiornato.
+- **Release** (`.github/workflows/release.yml`), a ogni push su `main`: una release GitHub `v<versione>-<esecuzione>` con l'APK Android firmato, uno zip per Windows e il tar.gz e lo snap per Linux.
 
 ### Impostazioni una tantum su GitHub
 
 - **Pages**: Settings → Pages → Source: «GitHub Actions». Su un repository privato, Pages richiede un piano a pagamento; altrimenti il repository deve essere pubblico.
-- **Android**: l'APK della release `latest` (disattivata) è firmato con una chiave di debug. Le build del Play Store sono firmate con la chiave di caricamento (vedi sotto).
+- **Android**: l'APK delle release GitHub è firmato con la chiave di caricamento, quindi non può aggiornare una versione installata da Google Play (disinstallarla prima). Le build del Play Store sono firmate con la chiave di caricamento (vedi sotto).
 - **iOS**: la build non è firmata. Una pubblicazione su TestFlight o App Store richiede un account Apple Developer e i relativi certificati come secret.
 
 ## Play Store

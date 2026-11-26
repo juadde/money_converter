@@ -83,13 +83,14 @@ dart run flutter_launcher_icons
 - **Desktop** (`.github/workflows/desktop.yml`): snap dla Linuksa i pakiet MSIX dla Windows przy każdym pushu na `main`, publikowane w Snap Store i Microsoft Store po włączeniu (zob. „Windows i Linux”).
 - **Play Store** (`.github/workflows/play-store.yml`): podpisany pakiet Android i strona w sklepie, wysyłane do Google Play przy każdym pushu na `main` po włączeniu (zob. „Play Store”).
 - **Deploy** (`.github/workflows/deploy.yml`):
-  - przy każdym pushu na `main`: aplikacja web i polityka prywatności na GitHub Pages. Wydanie APK i build iOS są na razie wyłączone (`if: false`);
+  - przy każdym pushu na `main`: aplikacja web i polityka prywatności na GitHub Pages. Build iOS jest na razie wyłączony (`if: false`);
   - w każdy dzień roboczy po publikacji EBC: ponowne wdrożenie web z aktualnym `rates.json`.
+- **Release** (`.github/workflows/release.yml`), przy każdym pushu na `main`: wydanie GitHub `v<wersja>-<uruchomienie>` z podpisanym APK dla Androida, archiwum zip dla Windows oraz tar.gz i snapem dla Linuksa.
 
 ### Jednorazowe ustawienia w GitHubie
 
 - **Pages**: Settings → Pages → Source: „GitHub Actions”. W prywatnym repozytorium Pages wymaga płatnego planu; w przeciwnym razie repozytorium musi być publiczne.
-- **Android**: APK z wydania `latest` (wyłączonego) jest podpisany kluczem debugowania. Buildy dla Play Store są podpisywane kluczem przesyłania (zob. niżej).
+- **Android**: APK z wydań GitHub jest podpisany kluczem przesyłania, więc nie może zaktualizować wersji zainstalowanej z Google Play (najpierw ją odinstaluj). Buildy dla Play Store są podpisywane kluczem przesyłania (zob. niżej).
 - **iOS**: build nie jest podpisany. Publikacja w TestFlight lub App Store wymaga konta Apple Developer i jego certyfikatów jako sekretów.
 
 ## Play Store

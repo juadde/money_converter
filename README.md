@@ -83,13 +83,14 @@ dart run flutter_launcher_icons
 - **Desktop** (`.github/workflows/desktop.yml`): Linux snap and Windows MSIX package on every push on `main`, published to the Snap Store and the Microsoft Store once enabled (see "Windows and Linux").
 - **Play Store** (`.github/workflows/play-store.yml`): signed Android bundle and store listing, sent to Google Play on every push on `main` once enabled (see "Play Store").
 - **Deploy** (`.github/workflows/deploy.yml`):
-  - on every push on `main`: web app and privacy policy on GitHub Pages. The APK release and the iOS build are disabled for now (`if: false`);
+  - on every push on `main`: web app and privacy policy on GitHub Pages. The iOS build is disabled for now (`if: false`);
   - every working day after the ECB publication: web redeployment with an up-to-date `rates.json`.
+- **Release** (`.github/workflows/release.yml`), on every push on `main`: a GitHub release `v<version>-<run>` with the signed Android APK, a Windows zip and the Linux tar.gz and snap.
 
 ### One-time GitHub settings
 
 - **Pages**: Settings → Pages → Source: "GitHub Actions". On a private repository, Pages needs a paid plan; otherwise the repository must be public.
-- **Android**: the APK of the `latest` release (disabled) is signed with a debug key. Play Store builds are signed with the upload key (see below).
+- **Android**: the APK of the GitHub releases is signed with the upload key, so it cannot update a version installed from Google Play (uninstall it first). Play Store builds are signed with the upload key too (see below).
 - **iOS**: the build is not signed. A TestFlight or App Store release needs an Apple Developer account and its certificates as secrets.
 
 ## Play Store
