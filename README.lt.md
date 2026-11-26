@@ -197,6 +197,17 @@ Abu paketai visada pasiekiami kaip paleidimo artefaktai. Skelbimas vyksta pagal 
 
 Nuo tada kiekvienas `main` pakeitimas sukuria ir išsiunčia naują pateikimą (versija `2.0.<paleidimo numeris>.0`).
 
+## „Windows“ kodo pasirašymas
+
+„GitHub“ leidimų „Windows“ zip archyvą nemokamai gali pasirašyti „SignPath Foundation“ – atvirojo kodo projektams skirta programa (žr. [CODE_SIGNING.md](CODE_SIGNING.md)). Be toliau nurodytų nustatymų zip archyvas skelbiamas nepasirašytas.
+
+1. Pateikti paraišką [signpath.org](https://signpath.org) su šia saugykla (licencija GPL-3.0). Įjungti dviejų veiksnių autentifikavimą „GitHub“ ir „SignPath“.
+2. Priėmus, „SignPath“: projektas `money_converter`, artefakto konfigūracija nukopijuota iš `store/signpath/artifact-configuration.xml`, pasirašymo politika `release-signing`, susieta su šia „GitHub“ saugykla kaip patikima kompiliavimo sistema.
+3. „GitHub“: slaptoji reikšmė `SIGNPATH_API_TOKEN` (CI naudotojo, galinčio pateikti užklausas, raktas), kintamasis `SIGNPATH_ORGANIZATION_ID`. Neprivaloma: `SIGNPATH_PROJECT_SLUG` ir `SIGNPATH_SIGNING_POLICY_SLUG`, jei pavadinimai kitokie.
+4. Kiekvieno leidimo metu patvirtinti pasirašymo užklausą „SignPath“: darbo eiga laukia iki 2 valandų.
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
 ## Licencija
 
 Copyright (C) 2026 Julien Addé

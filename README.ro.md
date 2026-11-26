@@ -197,6 +197,17 @@ Ambele pachete sunt mereu disponibile ca artefacte ale rulării. Publicarea urme
 
 De atunci, fiecare push pe `main` creează și trimite o nouă trimitere (versiunea `2.0.<număr de rulare>.0`).
 
+## Semnarea codului pentru Windows
+
+Arhiva zip pentru Windows din release-urile GitHub poate fi semnată gratuit de SignPath Foundation, un program pentru proiecte open source (vezi [CODE_SIGNING.md](CODE_SIGNING.md)). Fără setările de mai jos, arhiva este publicată nesemnată.
+
+1. Se depune o cerere pe [signpath.org](https://signpath.org) cu acest depozit (licența GPL-3.0). Se activează autentificarea în doi pași pe GitHub și pe SignPath.
+2. După acceptare, în SignPath: proiectul `money_converter`, configurația de artefact copiată din `store/signpath/artifact-configuration.xml`, politica de semnare `release-signing`, legată de acest depozit GitHub ca sistem de build de încredere.
+3. GitHub: secretul `SIGNPATH_API_TOKEN` (tokenul unui utilizator CI cu drept de trimitere), variabila `SIGNPATH_ORGANIZATION_ID`. Opțional: `SIGNPATH_PROJECT_SLUG` și `SIGNPATH_SIGNING_POLICY_SLUG` dacă numele diferă.
+4. La fiecare release, se aprobă cererea de semnare în SignPath: workflow-ul așteaptă până la 2 ore.
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
 ## Licență
 
 Copyright (C) 2026 Julien Addé

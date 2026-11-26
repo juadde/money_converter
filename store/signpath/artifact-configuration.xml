@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SignPath artifact configuration for the Windows app (paste it into the
+  SignPath project, Artifact configurations). The workflow uploads the
+  content of build/windows/x64/runner/Release as a zip; only our own
+  executable is signed. Third-party binaries (the Flutter engine DLL) are
+  shipped as they are, as the SignPath Foundation conditions require.
+-->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <zip-file>
+    <pe-file path="moneyconverter.exe">
+      <authenticode-sign />
+    </pe-file>
+  </zip-file>
+</artifact-configuration>
