@@ -96,12 +96,14 @@ dart run flutter_launcher_icons
 
 ## Saugumas ir SBOM
 
+Norėdami pranešti apie pažeidžiamumą, žr. [SECURITY.md](SECURITY.md) (privatus pranešimas „GitHub“, ne viešas „issue“).
+
 - **SBOM**: kiekvienas kompiliavimas turi programinės įrangos komponentų sąrašą SPDX formatu, sukurtą su [Syft](https://github.com/anchore/syft) („Dart“ ir „Flutter“ paketai iš `pubspec.lock` ir kompiliavime rasti komponentai). „GitHub“ leidimai turi po vieną kiekvienam failui (`<failas>.spdx.json`); žiniatinklio programa skelbia savąjį adresu [sbom.spdx.json](https://juadde.github.io/money_converter/sbom.spdx.json); parduotuvių kompiliavimai jį saugo kaip paleidimo artefaktą.
 - **Atestacijos**: leidimų failai turi kompiliavimo kilmės ir SBOM atestacijas, pasirašytas su „Sigstore“. Failui patikrinti: `gh attestation verify money-converter-android.apk -R juadde/money_converter`.
 - **Pažeidžiamumų patikra**: darbo eiga „Security“ tikrina SBOM su [Grype](https://github.com/anchore/grype). Pull request nepavyksta, jei randamas didelis ar kritinis pažeidžiamumas, kuriam yra pataisa. `main` šakoje ir kiekvieną pirmadienį visi rezultatai siunčiami į skirtuką „Security“ (Code scanning), o priklausomybės – į priklausomybių grafą.
 - **Dependabot** (`.github/dependabot.yml`): kiekvieną pirmadienį vienas pull request „Dart“ paketams ir vienas „GitHub Actions“; saugumo atnaujinimai – iš karto.
 
-Vienkartinis nustatymas: Settings → Code security → įjungti „Dependabot alerts“ ir „Dependabot security updates“.
+Vienkartinis nustatymas: Settings → Code security → įjungti „Private vulnerability reporting“, „Dependabot alerts“ ir „Dependabot security updates“.
 
 ## Play Store
 

@@ -96,12 +96,14 @@ dart run flutter_launcher_icons
 
 ## Sécurité et SBOM
 
+Pour signaler une vulnérabilité, voir [SECURITY.md](SECURITY.md) (rapport privé sur GitHub, pas de ticket public).
+
 - **SBOM** : chaque build a sa nomenclature logicielle au format SPDX, produite par [Syft](https://github.com/anchore/syft) (paquets Dart et Flutter de `pubspec.lock`, et composants trouvés dans le build). Les releases GitHub en ont une par fichier (`<fichier>.spdx.json`) ; l'application web publie la sienne sur [sbom.spdx.json](https://juadde.github.io/money_converter/sbom.spdx.json) ; les builds des stores la gardent en artefact du run.
 - **Attestations** : les fichiers des releases ont une attestation de provenance du build et une attestation de SBOM, signées avec Sigstore. Pour vérifier un fichier : `gh attestation verify money-converter-android.apk -R juadde/money_converter`.
 - **Analyse des vulnérabilités** : le workflow Security analyse le SBOM avec [Grype](https://github.com/anchore/grype). Une pull request échoue en cas de vulnérabilité haute ou critique qui a un correctif. Sur `main` et chaque lundi, tous les résultats vont dans l'onglet Security (Code scanning), et les dépendances dans le graphe de dépendances.
 - **Dependabot** (`.github/dependabot.yml`) : chaque lundi, une pull request pour les paquets Dart et une pour les GitHub Actions ; les mises à jour de sécurité tout de suite.
 
-Réglage à faire une fois : Settings → Code security → activer « Dependabot alerts » et « Dependabot security updates ».
+Réglage à faire une fois : Settings → Code security → activer « Private vulnerability reporting », « Dependabot alerts » et « Dependabot security updates ».
 
 ## Play Store
 
