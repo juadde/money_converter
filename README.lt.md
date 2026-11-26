@@ -86,12 +86,22 @@ dart run flutter_launcher_icons
   - kiekvienam `main` pakeitimui: žiniatinklio programa ir privatumo politika „GitHub Pages“. „iOS“ kompiliavimas kol kas išjungtas (`if: false`);
   - kiekvieną darbo dieną po ECB paskelbimo: žiniatinklio programa iš naujo įdiegiama su atnaujintu `rates.json`.
 - **Release** (`.github/workflows/release.yml`), kiekvienam `main` pakeitimui: „GitHub“ leidimas `v<versija>-<paleidimas>` su pasirašytu „Android“ APK, „Windows“ zip ir „Linux“ tar.gz bei snap paketais.
+- **Security** (`.github/workflows/security.yml`), kiekvienam PR, kiekvienam `main` pakeitimui ir kiekvieną pirmadienį: priklausomybių pažeidžiamumų patikra (žr. „Saugumas ir SBOM“).
 
 ### Vienkartiniai „GitHub“ nustatymai
 
 - **Pages**: Settings → Pages → Source: „GitHub Actions“. Privačiai saugyklai „Pages“ reikalingas mokamas planas; kitu atveju saugykla turi būti vieša.
 - **Android**: „GitHub“ leidimų APK pasirašytas įkėlimo raktu, todėl juo negalima atnaujinti iš „Google Play“ įdiegtos versijos (pirmiausia ją pašalinkite). „Play Store“ paketai pasirašomi įkėlimo raktu (žr. toliau).
 - **iOS**: paketas nepasirašytas. Norint skelbti „TestFlight“ ar „App Store“, reikia „Apple Developer“ paskyros ir jos sertifikatų kaip slaptųjų reikšmių.
+
+## Saugumas ir SBOM
+
+- **SBOM**: kiekvienas kompiliavimas turi programinės įrangos komponentų sąrašą SPDX formatu, sukurtą su [Syft](https://github.com/anchore/syft) („Dart“ ir „Flutter“ paketai iš `pubspec.lock` ir kompiliavime rasti komponentai). „GitHub“ leidimai turi po vieną kiekvienam failui (`<failas>.spdx.json`); žiniatinklio programa skelbia savąjį adresu [sbom.spdx.json](https://juadde.github.io/money_converter/sbom.spdx.json); parduotuvių kompiliavimai jį saugo kaip paleidimo artefaktą.
+- **Atestacijos**: leidimų failai turi kompiliavimo kilmės ir SBOM atestacijas, pasirašytas su „Sigstore“. Failui patikrinti: `gh attestation verify money-converter-android.apk -R juadde/money_converter`.
+- **Pažeidžiamumų patikra**: darbo eiga „Security“ tikrina SBOM su [Grype](https://github.com/anchore/grype). Pull request nepavyksta, jei randamas didelis ar kritinis pažeidžiamumas, kuriam yra pataisa. `main` šakoje ir kiekvieną pirmadienį visi rezultatai siunčiami į skirtuką „Security“ (Code scanning), o priklausomybės – į priklausomybių grafą.
+- **Dependabot** (`.github/dependabot.yml`): kiekvieną pirmadienį vienas pull request „Dart“ paketams ir vienas „GitHub Actions“; saugumo atnaujinimai – iš karto.
+
+Vienkartinis nustatymas: Settings → Code security → įjungti „Dependabot alerts“ ir „Dependabot security updates“.
 
 ## Play Store
 

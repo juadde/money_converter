@@ -86,12 +86,22 @@ dart run flutter_launcher_icons
   - przy każdym pushu na `main`: aplikacja web i polityka prywatności na GitHub Pages. Build iOS jest na razie wyłączony (`if: false`);
   - w każdy dzień roboczy po publikacji EBC: ponowne wdrożenie web z aktualnym `rates.json`.
 - **Release** (`.github/workflows/release.yml`), przy każdym pushu na `main`: wydanie GitHub `v<wersja>-<uruchomienie>` z podpisanym APK dla Androida, archiwum zip dla Windows oraz tar.gz i snapem dla Linuksa.
+- **Security** (`.github/workflows/security.yml`), przy każdym PR, każdym pushu na `main` i w każdy poniedziałek: skanowanie zależności pod kątem podatności (zob. „Bezpieczeństwo i SBOM”).
 
 ### Jednorazowe ustawienia w GitHubie
 
 - **Pages**: Settings → Pages → Source: „GitHub Actions”. W prywatnym repozytorium Pages wymaga płatnego planu; w przeciwnym razie repozytorium musi być publiczne.
 - **Android**: APK z wydań GitHub jest podpisany kluczem przesyłania, więc nie może zaktualizować wersji zainstalowanej z Google Play (najpierw ją odinstaluj). Buildy dla Play Store są podpisywane kluczem przesyłania (zob. niżej).
 - **iOS**: build nie jest podpisany. Publikacja w TestFlight lub App Store wymaga konta Apple Developer i jego certyfikatów jako sekretów.
+
+## Bezpieczeństwo i SBOM
+
+- **SBOM**: każda kompilacja ma wykaz składników oprogramowania w formacie SPDX, tworzony przez [Syft](https://github.com/anchore/syft) (pakiety Dart i Flutter z `pubspec.lock` oraz składniki znalezione w kompilacji). Wydania GitHub mają jeden na plik (`<plik>.spdx.json`); aplikacja webowa publikuje swój pod adresem [sbom.spdx.json](https://juadde.github.io/money_converter/sbom.spdx.json); kompilacje dla sklepów zachowują go jako artefakt uruchomienia.
+- **Atestacje**: pliki wydań mają atestację pochodzenia kompilacji i atestację SBOM, podpisane przez Sigstore. Aby sprawdzić plik: `gh attestation verify money-converter-android.apk -R juadde/money_converter`.
+- **Skanowanie podatności**: workflow Security skanuje SBOM narzędziem [Grype](https://github.com/anchore/grype). Pull request kończy się błędem przy wysokiej lub krytycznej podatności, dla której jest poprawka. Na `main` i w każdy poniedziałek wszystkie wyniki trafiają do karty Security (Code scanning), a zależności do grafu zależności.
+- **Dependabot** (`.github/dependabot.yml`): w każdy poniedziałek jeden pull request dla pakietów Dart i jeden dla GitHub Actions; aktualizacje bezpieczeństwa od razu.
+
+Jednorazowe ustawienie: Settings → Code security → włączyć „Dependabot alerts” i „Dependabot security updates”.
 
 ## Play Store
 

@@ -16,3 +16,5 @@
 - The README exists in the 8 languages (`README.md` in English, `README.<lang>.md` for the
   others), with a language bar at the top: change them all together.
 - Play locales: en-US, fr-FR, de-DE, es-ES, it-IT, pl-PL, ro, lt.
+- Every build job publishes an SBOM (`anchore/sbom-action`); a new build or platform gets one too.
+  Dependabot (`.github/dependabot.yml`) and the Security workflow cover the dependencies.

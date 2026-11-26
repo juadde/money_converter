@@ -32,6 +32,14 @@ jobs:
         run: cp site/privacy.html build/web/privacy.html
       - name: Add the ECB rates as JSON
         run: python3 tool/ecb_to_json.py --output build/web/rates.json
+      # Published with the site: https://juadde.github.io/money_converter/sbom.spdx.json
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: build/web/sbom.spdx.json
+          upload-artifact: false
       - uses: actions/upload-pages-artifact@v5
         with:
           path: build/web

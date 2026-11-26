@@ -76,6 +76,13 @@ jobs:
       - uses: snapcore/action-build@v1
         id: snap
 
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          artifact-name: moneyconverter-snap-${{ github.run_number }}.spdx.json
+
       - uses: actions/upload-artifact@v7
         with:
           name: moneyconverter-snap-${{ github.run_number }}
@@ -131,6 +138,13 @@ jobs:
           fi
           dart run msix:create "${args[@]}"
           ls -l "$MSIX"
+
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          artifact-name: moneyconverter-msix-${{ github.run_number }}.spdx.json
 
       - uses: actions/upload-artifact@v7
         with:
