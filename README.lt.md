@@ -79,7 +79,7 @@ dart run flutter_launcher_icons
 
 ## Nuolatinė integracija ir diegimas
 
-- **CI** (`.github/workflows/ci.yml`), kiekvienam PR ir kiekvienam `main` pakeitimui: analizė, testai, parduotuvės aprašo patikra, žiniatinklio kompiliavimas. APK kompiliavimas kol kas išjungtas (`if: false`).
+- **CI** (`.github/workflows/ci.yml`), kiekvienam PR ir kiekvienam `main` pakeitimui: analizė, testai, parduotuvės aprašo patikra, žiniatinklio kompiliavimas ir patikra, ar „Dart“ paketai (`flutter pub outdated`) ir „GitHub Actions“ yra naujausių versijų. APK kompiliavimas kol kas išjungtas (`if: false`).
 - **Desktop** (`.github/workflows/desktop.yml`): „Linux“ snap ir „Windows“ MSIX paketas kiekvienam `main` pakeitimui, įjungus skelbiami „Snap Store“ ir „Microsoft Store“ (žr. „Windows ir Linux“).
 - **Play Store** (`.github/workflows/play-store.yml`): pasirašytas „Android“ paketas ir parduotuvės aprašas, įjungus siunčiami į „Google Play“ kiekvienam `main` pakeitimui (žr. „Play Store“).
 - **Deploy** (`.github/workflows/deploy.yml`):

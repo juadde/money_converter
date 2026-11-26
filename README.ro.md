@@ -79,7 +79,7 @@ dart run flutter_launcher_icons
 
 ## Integrare și livrare continuă
 
-- **CI** (`.github/workflows/ci.yml`), la fiecare PR și fiecare push pe `main`: analiză, teste, verificarea fișei din magazin, build web. Build-ul APK este dezactivat deocamdată (`if: false`).
+- **CI** (`.github/workflows/ci.yml`), la fiecare PR și fiecare push pe `main`: analiză, teste, verificarea fișei din magazin, build web și verificarea că pachetele Dart (`flutter pub outdated`) și GitHub Actions sunt la ultima versiune. Build-ul APK este dezactivat deocamdată (`if: false`).
 - **Desktop** (`.github/workflows/desktop.yml`): snap Linux și pachet MSIX Windows la fiecare push pe `main`, publicate în Snap Store și Microsoft Store după activare (vezi „Windows și Linux”).
 - **Play Store** (`.github/workflows/play-store.yml`): bundle Android semnat și fișa din magazin, trimise la Google Play la fiecare push pe `main` după activare (vezi „Play Store”).
 - **Deploy** (`.github/workflows/deploy.yml`):
