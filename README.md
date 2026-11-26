@@ -197,6 +197,17 @@ Both packages are always available as run artifacts. Publishing follows the same
 
 From then on, every push on `main` creates and sends a new submission (version `2.0.<run number>.0`).
 
+## Windows code signing
+
+The Windows zip of the GitHub releases can be signed for free by the SignPath Foundation, an open source programme (see [CODE_SIGNING.md](CODE_SIGNING.md)). Without the settings below, the zip is published unsigned.
+
+1. Apply at [signpath.org](https://signpath.org) with this repository (GPL-3.0 license). Enable multi-factor authentication on GitHub and on SignPath.
+2. Once accepted, in SignPath: project `money_converter`, artifact configuration copied from `store/signpath/artifact-configuration.xml`, signing policy `release-signing`, linked to this GitHub repository as a trusted build system.
+3. GitHub: secret `SIGNPATH_API_TOKEN` (token of a CI user allowed to submit), variable `SIGNPATH_ORGANIZATION_ID`. Optional: `SIGNPATH_PROJECT_SLUG` and `SIGNPATH_SIGNING_POLICY_SLUG` if the names differ.
+4. On every release, approve the signing request in SignPath: the workflow waits up to 2 hours.
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
 ## License
 
 Copyright (C) 2026 Julien Addé

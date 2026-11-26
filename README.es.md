@@ -197,6 +197,17 @@ Ambos paquetes están siempre disponibles como artefactos de la ejecución. La p
 
 A partir de ahí, cada push a `main` crea y envía un nuevo envío (versión `2.0.<número de ejecución>.0`).
 
+## Firma de código para Windows
+
+El zip de Windows de las releases de GitHub puede firmarse gratis con la SignPath Foundation, un programa para proyectos de código abierto (ver [CODE_SIGNING.md](CODE_SIGNING.md)). Sin los ajustes siguientes, el zip se publica sin firmar.
+
+1. Solicitarlo en [signpath.org](https://signpath.org) con este repositorio (licencia GPL-3.0). Activar la autenticación en dos pasos en GitHub y en SignPath.
+2. Una vez aceptado, en SignPath: proyecto `money_converter`, configuración de artefacto copiada de `store/signpath/artifact-configuration.xml`, política de firma `release-signing`, vinculada a este repositorio de GitHub como sistema de build de confianza.
+3. GitHub: secreto `SIGNPATH_API_TOKEN` (token de un usuario de CI autorizado a enviar), variable `SIGNPATH_ORGANIZATION_ID`. Opcional: `SIGNPATH_PROJECT_SLUG` y `SIGNPATH_SIGNING_POLICY_SLUG` si los nombres son distintos.
+4. En cada release, aprobar la solicitud de firma en SignPath: el workflow espera hasta 2 horas.
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
 ## Licencia
 
 Copyright (C) 2026 Julien Addé

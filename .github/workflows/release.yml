@@ -75,6 +75,14 @@ jobs:
     defaults:
       run:
         shell: bash
+    outputs:
+      signed: ${{ steps.signing.outputs.enabled }}
+    env:
+      # Code signing by SignPath (see CODE_SIGNING.md), once the project is
+      # accepted and these are set: secret SIGNPATH_API_TOKEN, variable
+      # SIGNPATH_ORGANIZATION_ID. Without them the zip is left unsigned.
+      SIGNPATH_ORGANIZATION_ID: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+      HAS_SIGNPATH_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
@@ -84,11 +92,47 @@ jobs:
       - name: Generate platform folders
         run: bash tool/bootstrap_platforms.sh
       - run: flutter build windows --release
+
+      - name: Code signing enabled?
+        id: signing
+        run: |
+          if [ -n "$SIGNPATH_ORGANIZATION_ID" ] && [ "$HAS_SIGNPATH_TOKEN" = true ] \
+             && [ "${{ github.event_name }}" != pull_request ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # SignPath fetches the unsigned files from GitHub itself, which proves
+      # they were built here from the public repository.
+      - name: Upload the unsigned app for signing
+        id: unsigned
+        if: steps.signing.outputs.enabled == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-unsigned
+          path: build/windows/x64/runner/Release
+          retention-days: 1
+      - name: Sign with SignPath
+        if: steps.signing.outputs.enabled == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG || 'money_converter' }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG || 'release-signing' }}
+          github-artifact-id: ${{ steps.unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          # Release signing is approved by hand in SignPath: leave time for it.
+          wait-for-completion-timeout-in-seconds: 7200
+          output-artifact-directory: signed
+
       - name: Zip the app
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
-          Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath dist/money-converter-windows-x64.zip
+          $app = if ("${{ steps.signing.outputs.enabled }}" -eq "true") { "signed" } else { "build/windows/x64/runner/Release" }
+          Compress-Archive -Path "$app/*" -DestinationPath dist/money-converter-windows-x64.zip
       - uses: actions/upload-artifact@v7
         with:
           name: release-windows
@@ -146,6 +190,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RUN: ${{ github.run_number }}
+          WINDOWS_SIGNED: ${{ needs.windows.outputs.signed }}
         run: |
           version=$(sed -n 's/^version: *\([0-9.]*\).*/\1/p' pubspec.yaml)
           tag="v${version}-${RUN}"
@@ -166,7 +211,11 @@ jobs:
             echo "| File | Platform | How to install |"
             echo "| --- | --- | --- |"
             echo "| \`money-converter-android.apk\` | Android 5.0+ | Open the file on the phone (allow installs from this source). Signed with the developer's own key: uninstall a Google Play version first. |"
-            echo "| \`money-converter-windows-x64.zip\` | Windows 10/11 (x64) | Unzip and run \`moneyconverter.exe\`. Not signed: Windows SmartScreen may ask for confirmation. |"
+            if [ "$WINDOWS_SIGNED" = true ]; then
+              echo "| \`money-converter-windows-x64.zip\` | Windows 10/11 (x64) | Unzip and run \`moneyconverter.exe\`. Signed: free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org). |"
+            else
+              echo "| \`money-converter-windows-x64.zip\` | Windows 10/11 (x64) | Unzip and run \`moneyconverter.exe\`. Not signed: Windows SmartScreen may ask for confirmation. |"
+            fi
             echo "| \`money-converter-linux-x64.tar.gz\` | Linux (x64, GTK 3) | Extract and run \`./moneyconverter\`. |"
             echo "| \`money-converter-linux-amd64.snap\` | Linux (snapd) | \`sudo snap install --dangerous money-converter-linux-amd64.snap\` |"
             echo ""

@@ -197,6 +197,17 @@ Oba pakiety są zawsze dostępne jako artefakty uruchomienia. Publikacja działa
 
 Od tej pory każdy push na `main` tworzy i wysyła nowe zgłoszenie (wersja `2.0.<numer uruchomienia>.0`).
 
+## Podpisywanie kodu dla Windows
+
+Archiwum zip dla Windows z wydań GitHub może być bezpłatnie podpisywane przez SignPath Foundation, program dla projektów open source (zob. [CODE_SIGNING.md](CODE_SIGNING.md)). Bez poniższych ustawień zip jest publikowany bez podpisu.
+
+1. Złożyć wniosek na [signpath.org](https://signpath.org) z tym repozytorium (licencja GPL-3.0). Włączyć uwierzytelnianie dwuskładnikowe w GitHubie i w SignPath.
+2. Po akceptacji, w SignPath: projekt `money_converter`, konfiguracja artefaktu skopiowana z `store/signpath/artifact-configuration.xml`, zasady podpisywania `release-signing`, powiązane z tym repozytorium GitHub jako zaufany system budowania.
+3. GitHub: sekret `SIGNPATH_API_TOKEN` (token użytkownika CI z prawem przesyłania), zmienna `SIGNPATH_ORGANIZATION_ID`. Opcjonalnie: `SIGNPATH_PROJECT_SLUG` i `SIGNPATH_SIGNING_POLICY_SLUG`, jeśli nazwy są inne.
+4. Przy każdym wydaniu zatwierdzić żądanie podpisu w SignPath: workflow czeka do 2 godzin.
+
+Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
 ## Licencja
 
 Copyright (C) 2026 Julien Addé
