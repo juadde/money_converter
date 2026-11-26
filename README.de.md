@@ -79,7 +79,7 @@ dart run flutter_launcher_icons
 
 ## Kontinuierliche Integration und Bereitstellung
 
-- **CI** (`.github/workflows/ci.yml`), bei jedem PR und jedem Push auf `main`: Analyse, Tests, Prüfung des Store-Eintrags, Web-Build. Der APK-Build ist vorerst deaktiviert (`if: false`).
+- **CI** (`.github/workflows/ci.yml`), bei jedem PR und jedem Push auf `main`: Analyse, Tests, Prüfung des Store-Eintrags, Web-Build und Prüfung, dass die Dart-Pakete (`flutter pub outdated`) und die GitHub Actions auf dem neuesten Stand sind. Der APK-Build ist vorerst deaktiviert (`if: false`).
 - **Desktop** (`.github/workflows/desktop.yml`): Linux-Snap und Windows-MSIX-Paket bei jedem Push auf `main`, nach Aktivierung im Snap Store und im Microsoft Store veröffentlicht (siehe „Windows und Linux“).
 - **Play Store** (`.github/workflows/play-store.yml`): signiertes Android-Bundle und Store-Eintrag, nach Aktivierung bei jedem Push auf `main` an Google Play gesendet (siehe „Play Store“).
 - **Deploy** (`.github/workflows/deploy.yml`):

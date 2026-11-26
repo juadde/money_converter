@@ -28,6 +28,7 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(
       ProviderScope(
+        retry: noAutomaticRetry,
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
           ratesRepositoryProvider.overrideWithValue(

@@ -35,6 +35,27 @@ jobs:
         run: python3 tool/check_store_metadata.py
       - run: flutter build web --release
 
+  up-to-date:
+    name: Dependencies up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      # Fails when a Dart package is below its newest usable version (raise
+      # the constraint in pubspec.yaml) or is discontinued.
+      - name: Dart packages (flutter pub outdated)
+        run: |
+          flutter pub outdated
+          flutter pub outdated --json > "$RUNNER_TEMP/outdated.json"
+          python3 tool/check_outdated.py "$RUNNER_TEMP/outdated.json"
+      # Fails when a workflow uses an older major version of an action.
+      - name: GitHub Actions versions
+        run: python3 tool/check_actions.py
+
   android:
     name: Build Android APK
     # Disabled for now: only the web app is built. Remove this line to re-enable.

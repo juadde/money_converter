@@ -123,6 +123,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         key: UniqueKey(),
+        retry: noAutomaticRetry,
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
           ratesRepositoryProvider.overrideWithValue(

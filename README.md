@@ -79,7 +79,7 @@ dart run flutter_launcher_icons
 
 ## Continuous integration and deployment
 
-- **CI** (`.github/workflows/ci.yml`), on every PR and every push on `main`: analysis, tests, store listing check, web build. The APK build is disabled for now (`if: false`).
+- **CI** (`.github/workflows/ci.yml`), on every PR and every push on `main`: analysis, tests, store listing check, web build, and a check that the Dart packages (`flutter pub outdated`) and the GitHub Actions are at their latest versions. The APK build is disabled for now (`if: false`).
 - **Desktop** (`.github/workflows/desktop.yml`): Linux snap and Windows MSIX package on every push on `main`, published to the Snap Store and the Microsoft Store once enabled (see "Windows and Linux").
 - **Play Store** (`.github/workflows/play-store.yml`): signed Android bundle and store listing, sent to Google Play on every push on `main` once enabled (see "Play Store").
 - **Deploy** (`.github/workflows/deploy.yml`):

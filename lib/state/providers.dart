@@ -10,6 +10,11 @@ import '../l10n/app_strings.dart';
 import '../models/rates.dart';
 
 /// Overridden in `main()` with the real instance.
+/// For [ProviderScope.retry]: no automatic retry when a provider fails.
+/// Loading the rates already tries every source in turn and falls back to the
+/// saved rates, and the error screen has its own retry button.
+Duration? noAutomaticRetry(int retryCount, Object error) => null;
+
 final sharedPreferencesProvider = Provider<SharedPreferences>(
   (ref) => throw UnimplementedError('sharedPreferencesProvider not set'),
 );
@@ -36,7 +41,7 @@ class RatesController extends AsyncNotifier<RatesSnapshot> {
 
   /// Forces a download, keeping what is on screen if it fails.
   Future<void> refresh() async {
-    final previous = state.valueOrNull;
+    final previous = state.value;
     if (previous == null) state = const AsyncLoading();
     try {
       final snapshot =
