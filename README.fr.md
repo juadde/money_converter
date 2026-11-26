@@ -86,12 +86,24 @@ dart run flutter_launcher_icons
   - à chaque push sur `main` : appli web et règles de confidentialité sur GitHub Pages. Le build iOS est désactivé pour l'instant (`if: false`) ;
   - chaque jour ouvré après la publication de la BCE : redéploiement web avec un `rates.json` à jour.
 - **Release** (`.github/workflows/release.yml`), à chaque push sur `main` : une release GitHub `v<version>-<run>` avec l'APK Android signé, un zip Windows, et le tar.gz et le snap Linux.
+- **Security** (`.github/workflows/security.yml`), à chaque PR, à chaque push sur `main` et chaque lundi : analyse des vulnérabilités des dépendances (voir « Sécurité et SBOM »).
 
 ### Réglages à faire une fois sur GitHub
 
 - **Pages** : Settings → Pages → Source : « GitHub Actions ». Sur un dépôt privé, Pages demande une offre payante ; sinon il faut rendre le dépôt public.
 - **Android** : l'APK des releases GitHub est signé avec la clé d'importation ; il ne peut donc pas mettre à jour une version installée depuis Google Play (la désinstaller d'abord). Les builds du Play Store sont signés avec la clé d'importation (voir ci-dessous).
 - **iOS** : le build n'est pas signé. Une publication TestFlight ou App Store demande un compte Apple Developer et ses certificats en secrets.
+
+## Sécurité et SBOM
+
+Pour signaler une vulnérabilité, voir [SECURITY.md](SECURITY.md) (rapport privé sur GitHub, pas de ticket public).
+
+- **SBOM** : chaque build a sa nomenclature logicielle au format SPDX, produite par [Syft](https://github.com/anchore/syft) (paquets Dart et Flutter de `pubspec.lock`, et composants trouvés dans le build). Les releases GitHub en ont une par fichier (`<fichier>.spdx.json`) ; l'application web publie la sienne sur [sbom.spdx.json](https://juadde.github.io/money_converter/sbom.spdx.json) ; les builds des stores la gardent en artefact du run.
+- **Attestations** : les fichiers des releases ont une attestation de provenance du build et une attestation de SBOM, signées avec Sigstore. Pour vérifier un fichier : `gh attestation verify money-converter-android.apk -R juadde/money_converter`.
+- **Analyse des vulnérabilités** : le workflow Security analyse le SBOM avec [Grype](https://github.com/anchore/grype). Une pull request échoue en cas de vulnérabilité haute ou critique qui a un correctif. Sur `main` et chaque lundi, tous les résultats vont dans l'onglet Security (Code scanning), et les dépendances dans le graphe de dépendances.
+- **Dependabot** (`.github/dependabot.yml`) : chaque lundi, une pull request pour les paquets Dart et une pour les GitHub Actions ; les mises à jour de sécurité tout de suite.
+
+Réglage à faire une fois : Settings → Code security → activer « Private vulnerability reporting », « Dependabot alerts » et « Dependabot security updates ».
 
 ## Play Store
 

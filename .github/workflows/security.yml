@@ -1,0 +1,90 @@
+name: Security
+
+# Vulnerability scan of the app's dependencies:
+# - an SBOM of the project (Dart and Flutter packages, from pubspec.lock)
+#   is scanned with Grype against the known vulnerabilities;
+# - pull requests fail on a high or critical vulnerability that has a fix;
+# - on main and every Monday, the full results go to the Security tab
+#   (Code scanning) and the dependencies to the dependency graph, which
+#   lets Dependabot raise alerts and security updates.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    name: Vulnerability scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # dependency graph snapshot (main only)
+      security-events: write # code scanning results (main only)
+    env:
+      ON_MAIN: ${{ github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Resolve the dependencies (pubspec.lock)
+        run: flutter pub get
+
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: sbom.spdx.json
+          artifact-name: sbom-${{ github.run_number }}.spdx.json
+          dependency-snapshot: ${{ env.ON_MAIN }}
+
+      - name: Scan (all findings, for the Security tab)
+        id: sarif
+        uses: anchore/scan-action@v7
+        with:
+          sbom: sbom.spdx.json
+          fail-build: false
+          output-format: sarif
+          severity-cutoff: high
+
+      - name: Send the results to code scanning
+        if: env.ON_MAIN == 'true'
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ steps.sarif.outputs.sarif }}
+          category: grype
+
+      - name: Scan (fails on high or critical vulnerabilities with a fix)
+        uses: anchore/scan-action@v7
+        with:
+          sbom: sbom.spdx.json
+          fail-build: true
+          severity-cutoff: high
+          only-fixed: true
+          output-format: table
+          output-file: grype.txt
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## Vulnerability scan"
+            echo ""
+            echo "Packages in the SBOM: $(python3 -c "import json; print(len(json.load(open('sbom.spdx.json'))['packages']))" 2>/dev/null || echo '?')"
+            echo ""
+            echo '```'
+            if [ -s grype.txt ]; then cat grype.txt; else echo "No vulnerability with a fix at high or critical severity."; fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

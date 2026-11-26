@@ -86,12 +86,24 @@ dart run flutter_launcher_icons
   - la fiecare push pe `main`: aplicația web și politica de confidențialitate pe GitHub Pages. Build-ul iOS este dezactivat deocamdată (`if: false`);
   - în fiecare zi lucrătoare după publicarea BCE: o nouă livrare web cu un `rates.json` actualizat.
 - **Release** (`.github/workflows/release.yml`), la fiecare push pe `main`: un release GitHub `v<versiune>-<rulare>` cu APK-ul Android semnat, o arhivă zip pentru Windows și tar.gz-ul și snap-ul pentru Linux.
+- **Security** (`.github/workflows/security.yml`), la fiecare PR, la fiecare push pe `main` și în fiecare luni: scanarea vulnerabilităților dependențelor (vezi „Securitate și SBOM”).
 
 ### Setări unice pe GitHub
 
 - **Pages**: Settings → Pages → Source: „GitHub Actions”. Pentru un depozit privat, Pages cere un abonament plătit; altfel depozitul trebuie să fie public.
 - **Android**: APK-ul din release-urile GitHub este semnat cu cheia de încărcare, deci nu poate actualiza o versiune instalată din Google Play (dezinstaleaz-o mai întâi). Build-urile pentru Play Store sunt semnate cu cheia de încărcare (vezi mai jos).
 - **iOS**: build-ul nu este semnat. O publicare în TestFlight sau App Store cere un cont Apple Developer și certificatele lui ca secrete.
+
+## Securitate și SBOM
+
+Pentru a raporta o vulnerabilitate, vezi [SECURITY.md](SECURITY.md) (raport privat pe GitHub, fără issue public).
+
+- **SBOM**: fiecare build are lista de componente software în format SPDX, generată cu [Syft](https://github.com/anchore/syft) (pachetele Dart și Flutter din `pubspec.lock` și componentele găsite în build). Release-urile GitHub au câte una pentru fiecare fișier (`<fișier>.spdx.json`); aplicația web o publică pe a sa la [sbom.spdx.json](https://juadde.github.io/money_converter/sbom.spdx.json); build-urile pentru magazine o păstrează ca artefact al rulării.
+- **Atestări**: fișierele release-urilor au o atestare de proveniență a build-ului și o atestare SBOM, semnate cu Sigstore. Pentru a verifica un fișier: `gh attestation verify money-converter-android.apk -R juadde/money_converter`.
+- **Scanarea vulnerabilităților**: workflow-ul Security scanează SBOM-ul cu [Grype](https://github.com/anchore/grype). Un pull request eșuează la o vulnerabilitate ridicată sau critică pentru care există o corecție. Pe `main` și în fiecare luni, toate rezultatele ajung în fila Security (Code scanning), iar dependențele în graficul de dependențe.
+- **Dependabot** (`.github/dependabot.yml`): în fiecare luni, un pull request pentru pachetele Dart și unul pentru GitHub Actions; actualizările de securitate imediat.
+
+Setare unică: Settings → Code security → se activează „Private vulnerability reporting”, „Dependabot alerts” și „Dependabot security updates”.
 
 ## Play Store
 

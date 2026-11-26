@@ -2,7 +2,7 @@ name: Release
 
 # A GitHub release for every push on main (so every merged pull request),
 # with the app for Android (signed APK), Windows (zip) and Linux (tar.gz and
-# snap). Tag: v<pubspec version>-<run number>, for example v2.0.0-42.
+# snap), each with its SBOM and signed attestations. Tag: v<pubspec version>-<run number>, for example v2.0.0-42.
 
 on:
   push:
@@ -63,6 +63,13 @@ jobs:
           bash tool/build_android_release.sh
           mkdir -p dist
           cp build/app/outputs/flutter-apk/app-release.apk dist/money-converter-android.apk
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: dist/money-converter-android.apk.spdx.json
+          upload-artifact: false
       - uses: actions/upload-artifact@v7
         with:
           name: release-android
@@ -120,6 +127,13 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
           Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath dist/money-converter-windows-x64.zip
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: dist/money-converter-windows-x64.zip.spdx.json
+          upload-artifact: false
       - uses: actions/upload-artifact@v7
         with:
           name: release-windows
@@ -153,6 +167,17 @@ jobs:
           mkdir -p dist
           tar -czf dist/money-converter-linux-x64.tar.gz -C build/linux/x64/release/bundle .
           cp "${{ steps.snap.outputs.snap }}" dist/money-converter-linux-amd64.snap
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          output-file: dist/money-converter-linux-x64.tar.gz.spdx.json
+          upload-artifact: false
+      # The snap packages the same bundle (the GNOME libraries come from the
+      # gnome content snap at run time), so it gets the same SBOM.
+      - name: SBOM of the snap
+        run: cp dist/money-converter-linux-x64.tar.gz.spdx.json dist/money-converter-linux-amd64.snap.spdx.json
       - uses: actions/upload-artifact@v7
         with:
           name: release-linux
@@ -166,6 +191,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
@@ -173,6 +200,37 @@ jobs:
           pattern: release-*
           path: dist
           merge-multiple: true
+      # Signed statements (Sigstore) that each file was built by this
+      # workflow from this commit, and which components it contains.
+      # Check with: gh attestation verify <file> -R juadde/money_converter
+      - name: Build provenance attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            dist/*.apk
+            dist/*.zip
+            dist/*.tar.gz
+            dist/*.snap
+      - name: SBOM attestation (apk)
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/money-converter-android.apk
+          sbom-path: dist/money-converter-android.apk.spdx.json
+      - name: SBOM attestation (zip)
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/money-converter-windows-x64.zip
+          sbom-path: dist/money-converter-windows-x64.zip.spdx.json
+      - name: SBOM attestation (tar.gz)
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/money-converter-linux-x64.tar.gz
+          sbom-path: dist/money-converter-linux-x64.tar.gz.spdx.json
+      - name: SBOM attestation (snap)
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/money-converter-linux-amd64.snap
+          sbom-path: dist/money-converter-linux-amd64.snap.spdx.json
       - name: Create the release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -202,6 +260,15 @@ jobs:
             echo "| \`money-converter-linux-amd64.snap\` | Linux (snapd) | \`sudo snap install --dangerous money-converter-linux-amd64.snap\` |"
             echo ""
             echo "Web version: https://juadde.github.io/money_converter/"
+            echo ""
+            echo "## Software bill of materials and provenance"
+            echo ""
+            echo "Each file comes with its SBOM (\`<file>.spdx.json\`, SPDX 2.3): the Dart and Flutter packages and other components it contains."
+            echo "Build provenance and SBOM attestations are signed with Sigstore. To check a file:"
+            echo ""
+            echo "\`\`\`"
+            echo "gh attestation verify money-converter-android.apk -R ${GITHUB_REPOSITORY}"
+            echo "\`\`\`"
           } > notes.md
           gh release create "$tag" dist/* \
             --title "Money Converter ${version} (build ${RUN})" \

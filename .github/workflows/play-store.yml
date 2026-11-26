@@ -120,6 +120,13 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number }}
         run: bash tool/build_android_release.sh
 
+      - name: SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          artifact-name: moneyconverter-aab-${{ github.run_number }}.spdx.json
+
       - uses: actions/upload-artifact@v7
         with:
           # A dry-run bundle is signed with a throwaway key: Google Play
